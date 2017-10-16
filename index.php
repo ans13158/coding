@@ -1,6 +1,26 @@
 <?php
+session_start();
+require_once "connection.php";
+$login = 0;
+if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
+		$teamNo = $_SESSION['teamNo'];
+		$name = $_SESSION['teamName'];
+		$query = "SELECT * FROM `Teams` WHERE `TeamNo` = '$teamNo' AND `name` = '$name'";
+		$result = $conn->query($query);
+		if($result)  {
+			$row = $result->num_rows;
+			if($row)
+				$login = 1;
+			else 
+				$login = 0;
+			
+		}
+	}
 
-require_once "common/header.php" ;
+if(!$login)	
+	include_once "common/header.php" ;
+else
+	include_once "common/headerLogin.php";
 ?>
 
 <html>
