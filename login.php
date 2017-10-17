@@ -1,7 +1,19 @@
 <?php
 	require_once "connection.php";
+
 	session_start();
-	$error = "";
+
+	$error = ""; //FOR SHOWING ERRORS GENERATED (if any) DURING SUBMISSION.
+
+	/*
+	*
+	*FOLLOWING CODE RESTRICTS ACCESS TO PAGE :
+	*PAGE CAN BE ACCESSED ONLY WHEN USER IS NOT LOGGED-IN.
+	*"$_SESSION['teamNo']" AND "$_SESSION['teamName']" ENSURE THIS.
+	*IF SESSION EXISTS THEN CHECK IF CREDENTIALS ARE VALID.
+	*IF USER ALREADY LOGGED IN, THEN REDIRECT TO INDEX PAGE.
+	* 
+	*/
 	if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
 		$teamNo = $_SESSION['teamNo'];
 		$name = $_SESSION['teamName'];
@@ -15,7 +27,13 @@
 		}
 	}
 	
-
+	/*
+	*
+	*CODE FOR LOGIN.
+	*PARAMETERS CHECKED : "TeamName and Password".
+	*IF LOGIN SUCCESSFUL, CREATE AS SESSION AND PASS "Team Number, Team Name & Language(selected during *registration)".
+	*
+	*/
 	if(isset($_POST['signUp'] ) )  {
 		$name = isset($_POST['teamName']) ? trim($_POST['teamName']) : "" ;
 		$password = isset($_POST['password']) ? md5( trim( $_POST['password'] ) ) : "" ;
@@ -43,10 +61,18 @@
 	}
 
 ?>
+
 <?php
+	/*
+	*REQUIRE COMMON HEADER FOR EACH PAGE.
+	*/
 	require "common/header.php";
 ?>
 
 <?php
+				/*
+				*
+				*FOLLOWING VIEWS CONTAINS THE FORM FOR LOGIN
+				*/
 	include 'views/login.php';
 ?>

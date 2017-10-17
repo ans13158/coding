@@ -3,6 +3,15 @@
 	$error = "";
 	session_start();
 	
+	/*
+	*
+	*FOLLOWING CODE RESTRICTS ACCESS TO PAGE :
+	*PAGE CAN BE ACCESSED ONLY WHEN USER IS NOT LOGGED-IN.
+	*"$_SESSION['teamNo']" AND "$_SESSION['teamName']" ENSURE THIS.
+	*IF SESSION EXISTS THEN CHECK IF CREDENTIALS ARE VALID.
+	*IF USER ALREADY LOGGED IN, THEN REDIRECT TO INDEX PAGE.
+	* 
+	*/
 	if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
 		$teamNo = $_SESSION['teamNo'];
 		$name = $_SESSION['teamName'];
@@ -16,6 +25,12 @@
 		}
 	}
 	
+	/*
+	* CHECKING "$_POST['signUp']" ENSURES THAT PAGE HAS BEEN ACCESSED BY CLICKING ON THE SUBMIT BUTTON IN *FORM.
+	* "Team Name and Language" STORED IN "Teams" TABLE.
+	* INFO. ABOUT MEMBERS STORED IN "Members" TABLE.
+	* "Members" HAS FOREIGN KEY "TeamNo" FROM "Teams" TABLE.
+	*/
 	if(isset($_POST['signUp'] ) )   
 	{
 		$teamName = ( isset($_POST['teamName']) ) ? trim($_POST['teamName']) : '';
@@ -42,7 +57,8 @@
 			
 			else  
 			{
-				$team_no = $conn->insert_id;
+				$team_no = $conn->insert_id; //RETRIEVES LAST INSERTED AUTO-INCREMENT ID.
+				
 				$member_query = "INSERT INTO `Members` (`team_no`,`name1`, `id1`, `branch1`, `mail1`,`name2`, `id2`, `branch2`, `mail2`) VALUES ('$team_no','$mem1_name', '$mem1_id', '$mem1_branch', '$mem1_mail', '$mem2_name', '$mem2_id', '$mem2_branch', '$mem2_mail')";
 				$member_result = $conn->query($member_query);
 				
@@ -70,5 +86,7 @@
 require_once "common/header.php" ;
 ?>
 <?php
-
+	/*
+	*VIEW CONTAINS CODE OF REGISTRATION PAGE.
+	*/
 include "views/register.php";

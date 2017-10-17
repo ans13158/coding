@@ -1,5 +1,14 @@
 <?php
-
+	
+	/*
+	*
+	*FOLLOWING CODE RESTRICTS ACCESS TO PAGE :
+	*PAGE CAN BE ACCESSED ONLY WHEN USER IS LOGGED-IN.
+	*"$_SESSION['teamNo']" AND "$_SESSION['teamName']" ENSURE THIS.
+	*IF SESSION EXISTS THEN CHECK IF CREDENTIALS ARE VALID.
+	*IF USER NOT LOGGED IN, THEN REDIRECT TO INDEX PAGE.
+	* 
+	*/
 require_once "connection.php";
 	session_start();
 	$error = "";
@@ -16,7 +25,14 @@ require_once "connection.php";
 		}
 	}
 
+	/*
+	*LOGGIN OUT
+	*/
 	session_destroy();
+	
+	/*
+	*REDIRECT TO INDEX PAGE AFTER GETTING LOGGED-OUT.
+	*/
 	header('Location:index.php');
 
 ?>
