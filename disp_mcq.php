@@ -74,7 +74,19 @@
 	require_once "common/headerLogin.php";
 		
 ?>
+		<!-- Script to disable next or previous buttons according to current ques no. -->
+<script>
+	var urlParam = function(name)  {
+		var results = new RegExp('[/?&]' + name + '=([^&#]*)').exec(window.location.href);
+		if(results == null)  
+			return null;
+		else 
+			return decodeURI(results[1]) || 0;
+	}
 
+	var question = parseInt(urlParam('k'));
+
+</script>
 <div class="page-wrap">
 	<div class="row">
 		<!-- Displays color codes for attempted, unattempted, marked for review questions -->
@@ -120,18 +132,26 @@
 					}
 						?>
 
+						</div>
+					<div class="buttons">
+						<div class=" col-md-3 btn_nav">
+							<button id="previous_btn" class="btn btn-primary previous_btn" onclick="prevQues();"> Previous</button>
+						 </div>
+						 <div class="col-md-3 btn_nav">
+							<button id="next_btn" class="btn btn-primary next_btn" onclick="nextQues();"> Next</button>
+						 </div>
+						 <input type="hidden" id="max_question" name="max_question" value="<?= $no_of_ques ?> ">
 					</div>
-					<?php
-				?>	
 			</div>	
-			</div>			
+		</div>		
+
 		</div>
 	</div>
 
 			<!-- /*
 				  * DISPLAYS TIME LEFT. (static as of now;will be made dynamic later on).
 				  */ -->
-		<div class="col-md-4 col-sm-4 section-2 clock_inst2">
+		<div class="col-md-4 col-sm-4  clock_inst2">
 			<div class="clock_div">
 				<div class="clock">
 					<h4>Time left : 30:25:00</h4>
@@ -147,7 +167,7 @@
 					<?php for($i = 1; $i<= $no_of_ques; $i++) { ?>
 						<div class="col-md-3 quesNo_disp">
 							<div class="quesNo unattempted">
-								<a href="disp_mcq.php?k=<?= urlencode($i + 100); ?>"> <?= $i ?></a>
+								<a class="quesNo_link" href="disp_mcq.php?k=<?= urlencode($i + 100); ?>"> <?= $i ?></a>
 							</div>	
 						</div>	
 					<?php  } ?>	
@@ -158,3 +178,27 @@
 	</div>
 </div>
 </div>	
+
+<script>
+	var no_of_ques = document.getElementById('max_question').value ;
+	no_of_ques = parseInt(no_of_ques);
+	no_of_ques += 100;
+
+	var previous = document.getElementById('previous_btn');
+	var next = document.getElementById('next_btn');
+	
+	if(question == no_of_ques )  {
+		next.disabled = true;
+	}
+	if(question == 101)
+		previous.disabled = true;
+
+	function prevQues()  {
+		window.location.href = "disp_mcq.php?k=" + (question-1);
+	}
+	function nextQues()  {
+		window.location.href = "disp_mcq.php?k=" + (question+1);
+	}
+
+	
+</script>

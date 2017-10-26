@@ -54,7 +54,7 @@ body  {
 }
 
 .section-2  {
-	margin-top: 3%;
+	margin-top: 0.5%;
 }
 
 .clock_inst2  {
@@ -229,4 +229,31 @@ body  {
 	text-decoration: none;
 	color:black;
 	padding: 5%;
+}
+
+.buttons  {
+	margin-left: 65%;
+
+}
+.btn_nav  {
+	margin-right: 10%;
+	margin-top: 15%;
+}
+
+.previous_btn  {
+	/*width: 90%;*/
+	font-size: 18px;
+	padding-left:45%;
+	padding-right: 45%;
+	margin-right: 40%;
+
+}
+
+.next_btn  {
+	/*width: 90%;*/
+	font-size: 18px;
+	padding-left: 45%;
+	padding-right: 45%;
+	margin-left: 40%;
+
 }
