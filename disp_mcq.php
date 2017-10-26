@@ -25,7 +25,15 @@
 				header('Location:index.php');
 		}
 	}
-
+	$no_of_ques = "";
+	$query = "SELECT count(*) FROM `mcqs`";
+	$result = $conn->query($query);
+	if(!$result)
+		die("Error retrieving questions" . $conn->error);
+	$no_of_ques = $result->fetch_array()[0];
+	if(!$no_of_ques)
+		$message = "No questions stored in database. Please contact the organizers.";
+ 	
 
 	$quesNo = urldecode( $_GET['k'] );
 	$quesNo =  $quesNo - 100;
@@ -69,37 +77,84 @@
 
 <div class="page-wrap">
 	<div class="row">
-			<!-- /*
-				  * DISPLAYS TIME LEFT. (static as of now;will be made dynamic later on).
-				  */ -->
-		<div class="col-md-12 col-sm-12 section-1-mcq time-left">
-			<div class="clock_div">
-				<div class="clock clock-mcq">
-					<h4>Time left : 30:25:00</h4>
-				</div>
-			</div>	
-		</div>	
-	</div>
-
-	<div class="row">
-		<div class="col-md-8 mcq-disp-wrap">
-			<div class="mcq-disp">
-				<?= "<pre>" ?>
-				<h3>Question No. <?= $quesNo ?></h3>	
-				<?= " <h4 style='font-family:Times New Roman'> $quesContent </h4> " ?>
-					<br>
-				<?= "</pre>" ?>
-				<?php
-					for($i = 0;$i< 4;$i++)  {
-						echo "<h4>". $options[2+ $i] . "</h4>";
-					}
-				?>
+		<!-- Displays color codes for attempted, unattempted, marked for review questions -->
+		<div class="">
+			<div class="col-md-12 color-codes">
+					<div class="col-md-4">
+						<div class="color-1 coding" style="display: inline-block;">
+						</div>	
+						<div style="display: inline-block;"><h4 >Un-attempted</h4></div>
+					</div>
 					
-				
+					<div class="col-md-4">
+						<div class="color-2 coding" style="display: inline-block;">
+						</div>	
+						<div style="display: inline-block;"><h4 >Attempted</h4></div>
+					</div>
 
-
-
+					<div class="col-md-4">
+						<div class="color-3 coding" style="display: inline-block;">
+						</div>	
+						<div style="display: inline-block;"><h4 >Marked for Review</h4></div>
+					</div>	
 			</div>	
 		</div>	
 	</div>	
+		<div class="row">
+			<div class="col-md-8 col-sm-8 section-1 ques-summary">
+					<!-- <div class="mcq-disp"> -->
+				 <div class="mcq-ques"> 
+					<?= "<pre>" ?>
+					<h3>Question No. <?= $quesNo ?></h3>	
+					<?= " <h4 style='font-family:Times New Roman'> $quesContent </h4> " ?>
+						<br>
+					<?= "</pre>" ?>
+				</div>	
+				<?php
+					for($i = 0;$i< 4;$i++)  {
+						?>
+						<div class="mcq-options">
+							<?php
+								$optNo = $i+1;
+								echo "<pre><h4> $optNo).". $options[2+ $i] . "</h4></pre>";
+					}
+						?>
+
+					</div>
+					<?php
+				?>	
+			</div>	
+			</div>			
+		</div>
+	</div>
+
+			<!-- /*
+				  * DISPLAYS TIME LEFT. (static as of now;will be made dynamic later on).
+				  */ -->
+		<div class="col-md-4 col-sm-4 section-2 clock_inst2">
+			<div class="clock_div">
+				<div class="clock">
+					<h4>Time left : 30:25:00</h4>
+				</div>
+			</div>	
+
+			<!-- /*
+				  * DISPLAYS Question List.
+				  */ -->
+
+			<div class="quesList_div">
+				<div class="quesList">
+					<?php for($i = 1; $i<= $no_of_ques; $i++) { ?>
+						<div class="col-md-3 quesNo_disp">
+							<div class="quesNo unattempted">
+								<a href="disp_mcq.php?k=<?= urlencode($i + 100); ?>"> <?= $i ?></a>
+							</div>	
+						</div>	
+					<?php  } ?>	
+
+				</div>
+			</div>
+		</div>	
+	</div>
+</div>
 </div>	
