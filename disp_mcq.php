@@ -76,7 +76,41 @@
 ?>
 		<!-- Script to disable next or previous buttons according to current ques no. -->
 <script>
-	
+	/*
+	 * "answers[]" is used to retrieve value of cookie storing responses of previous questions.
+	 * "answers[]" also stores response of current question later in the code.
+	 * "responses" is the value and name of cookie storing responses of answers.
+	*/
+	var answers = [];
+
+	/*
+     * Function to retrieve VALUE of cookie whose name is given as parameter.
+	*/
+	function getCookie(c_name)  {
+	     var i,x,y,ARRcookies=document.cookie.split(";");
+	     for (i=0;i<ARRcookies.length;i++)  {
+		      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+		      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+		      x=x.replace(/^\s+|\s+$/g,"");
+		      if (x==c_name)  {
+		       	return unescape(y);
+		      }
+	     }
+    }
+
+    /*
+	 * Retrieve value of RESPONSES cookie, if exists.
+    */
+    var cookie_val = getCookie('responses');
+    if(cookie_val)
+		if(cookie_val.length)  {
+			answers = JSON.parse(cookie_val);
+			//alert(answers)
+		}
+
+	/*
+	 * Fetch value of GET parameter in URL.
+	*/	
 	var urlParam = function(name)  {
 		var results = new RegExp('[/?&]' + name + '=([^&#]*)').exec(window.location.href);
 		if(results == null)  
@@ -88,6 +122,7 @@
 	var question = parseInt(urlParam('k'));
 
 </script>
+
 <div class="page-wrap">
 	<div class="row">
 		<!-- Displays color codes for attempted, unattempted, marked for review questions -->
@@ -159,8 +194,8 @@
 				  */ -->
 		<div class="col-md-4 col-sm-4  clock_inst2">
 			<div class="clock_div">
-				<div class="clock">
-					<h4>Time left : 30:25:00</h4>
+				<div class="clock" id="clock">
+						
 				</div>
 			</div>	
 
@@ -211,13 +246,16 @@
 			}	
 	 	/*Fetch value of selected checkbox and store in "answers[]" array */
 
-
-
 	 	responses = JSON.stringify(answers);
 	 	document.cookie = 'responses=' + responses;
 }
 	
-		
+	/* 
+	 * "no_of_ques" stores no. of questions  in db.	
+	 * "questions" stores the current question no.
+	 * "prevQues()" & "nextQues()" give functionalities to PREVIOUS & NEXT buttons.
+	 */
+
 	var no_of_ques = document.getElementById('max_question').value ;
 	no_of_ques = parseInt(no_of_ques);
 	no_of_ques += 100;
@@ -225,6 +263,11 @@
 	var previous = document.getElementById('previous_btn');
 	var next = document.getElementById('next_btn');
 	
+	/*
+	* Disable NEXT or PREVIOUS buttons a/c to current ques no. :
+	* If current ques. is first question in list, disable PREVIOUS.
+	* If ques. last in list, disable NEXT.
+	*/
 	if(question == no_of_ques )  {
 		next.disabled = true;
 	}
@@ -239,4 +282,32 @@
 	}
 
 	
+
+			/*
+			 * Section makes TIME LEFT section dynamic.
+			*/	
+  function checkTime(i) {
+	  if (i < 10) {
+	    i = "0" + i;
+	  }
+	  return i;
+  }
+
+function startTime() {
+  var today = new Date();
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var s = today.getSeconds();
+  // add a zero in front of numbers<10
+  m = checkTime(m);
+  s = checkTime(s);
+  n = h + " : " + m +  " : " + s ;
+  document.getElementById('clock').innerHTML = "<h4> Time Left  " + n + "</h4>";
+  t = setTimeout(function() {
+    startTime()
+  }, 1000);
+}
+startTime();
+
+
 </script>
