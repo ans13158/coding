@@ -76,6 +76,7 @@
 ?>
 		<!-- Script to disable next or previous buttons according to current ques no. -->
 <script>
+	
 	var urlParam = function(name)  {
 		var results = new RegExp('[/?&]' + name + '=([^&#]*)').exec(window.location.href);
 		if(results == null)  
@@ -112,41 +113,46 @@
 			</div>	
 		</div>	
 	</div>	
-		<div class="row">
-			<div class="col-md-8 col-sm-8 section-1 ques-summary">
-					<!-- <div class="mcq-disp"> -->
-				 <div class="mcq-ques"> 
-					<?= "<pre>" ?>
-					<h3>Question No. <?= $quesNo ?></h3>	
-					<?= " <h4 style='font-family:Times New Roman'> $quesContent </h4> " ?>
-						<br>
-					<?= "</pre>" ?>
-				</div>	
-				<?php
-					for($i = 0;$i< 4;$i++)  {
-						?>
-						<div class="mcq-options">
-							<?php
-								$optNo = $i+1;
-								echo "<pre><h4> $optNo).". $options[2+ $i] . "</h4></pre>";
-					}
-						?>
 
+	<!-- DIV FOR DISPLAYING QUESTIONS AND OPTIONS -->
+			<div class="row">
+				<div class="col-md-8 col-sm-8 section-1 ques-summary">
+						<!-- <div class="mcq-disp"> -->
+					 <div class="mcq-ques"> 
+						<?= "<pre>" ?>
+						<h3>Question No. <?= $quesNo ?></h3>	
+						<?= " <h4 style='font-family:Times New Roman'> $quesContent </h4> " ?>
+							<br>
+						<?= "</pre>" ?>
+					</div>	
+					<?php
+						for($i = 0;$i< 4;$i++)  {
+							?>
+							<div class="mcq-options">
+								<?php
+									$optNo = $i+1;
+									echo "<pre> <label> <input type='checkbox' class='checkBox' value='$optNo' onclick='check($optNo)' id='$optNo' > ". $options[2+ $i] . "</label> </pre>";
+						}
+							?>
+
+							</div>
+						<div class="buttons">
+							<div class=" col-md-3 btn_nav">
+								<button id="previous_btn" class="btn btn-primary previous_btn" onclick="prevQues();"> Previous</button>
+							 </div>
+							 <div class="col-md-3 btn_nav">
+								<button id="next_btn" class="btn btn-primary next_btn" onclick="nextQues();"> Next</button>
+							 </div>
+							 <input type="hidden" id="max_question" name="max_question" value="<?= $no_of_ques ?> ">
 						</div>
-					<div class="buttons">
-						<div class=" col-md-3 btn_nav">
-							<button id="previous_btn" class="btn btn-primary previous_btn" onclick="prevQues();"> Previous</button>
-						 </div>
-						 <div class="col-md-3 btn_nav">
-							<button id="next_btn" class="btn btn-primary next_btn" onclick="nextQues();"> Next</button>
-						 </div>
-						 <input type="hidden" id="max_question" name="max_question" value="<?= $no_of_ques ?> ">
-					</div>
-			</div>	
-		</div>		
+				</div>	
+			</div>		
 
+			</div>
 		</div>
-	</div>
+
+	<!-- DIV FOR DISPLAYING QUESTIONS AND OPTIONS -->
+
 
 			<!-- /*
 				  * DISPLAYS TIME LEFT. (static as of now;will be made dynamic later on).
@@ -158,9 +164,7 @@
 				</div>
 			</div>	
 
-			<!-- /*
-				  * DISPLAYS Question List.
-				  */ -->
+			<!-- DISPLAYS LIST OF QUESTIONS WITH COLOR CODES DEFINED ABOVE. -->
 
 			<div class="quesList_div">
 				<div class="quesList">
@@ -173,13 +177,47 @@
 					<?php  } ?>	
 
 				</div>
-			</div>
+			</div> 
 		</div>	
 	</div>
 </div>
 </div>	
 
 <script>
+	function check(optNo)  {
+	 	/* Section enables checking only 1 checkbox at a time. */
+		 	for(var i = 1; i <=4; i++)
+		 		document.getElementById(i).checked = false;
+		 	var id = 'checkBox' + optNo;
+		 	document.getElementById(optNo).checked = true;
+	 	/* Section enables checking only 1 checkbox at a time. */
+
+
+	 	/*Fetch value of selected checkbox and store in "answers[]" array */
+			var checked = [];
+			var elements = document.getElementsByClassName('checkBox');
+			for(var i =0; elements[i]; i++)  {
+				if(elements[i].checked)
+					checked[i] = elements[i].value;
+				else
+					checked[i] = 0;	 
+			}
+			for(var i = 0; i<4; i++)  {
+				if(checked[i] != '0' || checked[i] != 0)  {
+					
+					//index.toString();
+					answers[question-101]  = parseInt(checked[i]);
+				}
+			}	
+	 	/*Fetch value of selected checkbox and store in "answers[]" array */
+
+
+
+	 	responses = JSON.stringify(answers);
+	 	document.cookie = 'responses=' + responses;
+}
+	
+		
 	var no_of_ques = document.getElementById('max_question').value ;
 	no_of_ques = parseInt(no_of_ques);
 	no_of_ques += 100;
