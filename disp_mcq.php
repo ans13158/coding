@@ -79,9 +79,14 @@
 	/*
 	 * "answers[]" is used to retrieve value of cookie storing responses of previous questions.
 	 * "answers[]" also stores response of current question later in the code.
+	 * "answers[]" also used to check if question has been attempted or left unattempted.
 	 * "responses" is the value and name of cookie storing responses of answers.
+	 * "question" stores current question no. by taking GET parameter.
+	 * "reviews[]" stores question nos. marked for review.
 	*/
 	var answers = [];
+	var responses = [];
+
 
 	/*
      * Function to retrieve VALUE of cookie whose name is given as parameter.
@@ -121,6 +126,7 @@
 
 	var question = parseInt(urlParam('k'));
 
+	
 </script>
 
 <div class="page-wrap">
@@ -205,7 +211,7 @@
 				<div class="quesList">
 					<?php for($i = 1; $i<= $no_of_ques; $i++) { ?>
 						<div class="col-md-3 quesNo_disp">
-							<div class="quesNo unattempted">
+							<div class="quesNo unattempted" id="ques<?= $i ?>">
 								<a class="quesNo_link" href="disp_mcq.php?k=<?= urlencode($i + 100); ?>"> <?= $i ?></a>
 							</div>	
 						</div>	
@@ -252,7 +258,7 @@
 	
 	/* 
 	 * "no_of_ques" stores no. of questions  in db.	
-	 * "questions" stores the current question no.
+	 * "question" stores the current question no.
 	 * "prevQues()" & "nextQues()" give functionalities to PREVIOUS & NEXT buttons.
 	 */
 
@@ -308,6 +314,30 @@ function startTime() {
   }, 1000);
 }
 startTime();
+
+	/*
+	* Function changes colors of circles with questions that are attempted, unattempted, etc. a/c to color * code. 
+	*/
+function changeColor()  {
+		// alert(responses)
+		for(var i = 0 ; i < answers.length; i++)  {
+			if(answers[i])  {
+			   id = "ques" + (i+1) ;
+			   document.getElementById(id).classList.remove("unattempted");
+			   document.getElementById(id).classList.add("attempted");
+			}
+		}
+			 //   id = "ques" + (i+1) ;
+			 //   var classes = document.getElementById(id).className.split(" ");
+			 //   for(var i =0;i<classes.length;i++)  {
+				//    if(classes[i] != "attempted" )  {
+				// 		document.getElementById(id).classList.remove("attempted");
+				//    		document.getElementById(id).classList.add("unattempted");
+				// 	}
+				// }	
+	}
+
+	changeColor();
 
 
 </script>
