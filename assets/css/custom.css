@@ -158,13 +158,58 @@ body  {
 	padding: 6%;
 }
 
-.mcq-ques  pre{
-	padding: 6%;
+.mcq-ques {
+	/*padding: 2%;*/
 	text-align: left;
+	/*height: auto;*/
+	overflow: auto
+}
+	
+.ques-heading  h4{
+	color:#111;
+}	
+
+.ques-heading img {
+	margin-left: 0 !important;
+	padding-left: 0 !important;
+	text-align: center;
 }
 
-.mcq-options pre  {
-	padding: 1%;	 
+#bookmark-dialog  {
+	padding:2%;
+	margin-left: -10px;
+	border : 1px solid black;
+	background-color: black;
+	color:white;
+	border-radius: 5%;
+	display: none;
+	height: 40px;
+	width:120px;
+	z-index: +10000;
+}
+
+#review_ques  {
+	height: 40px;
+	width:40px;
+}
+
+#bookmark-dialog p  {
+	text-align: center;
+	padding: 5%;
+}
+.ques-content  {
+	/*padding-left: 4%; */
+}
+.ques-content  h4{
+	color:#333;
+}
+.mcq-options   {
+	padding: 1%;
+	margin-top: 1%;	 
+}
+
+.options  {
+	padding: 2% !important;
 }
 
 .color-codes  {
@@ -247,6 +292,10 @@ body  {
 	text-align: center;
 }
 
+#review-ques  {
+	margin-left: -20px;
+}
+
 .review a {
 	color:white !important;
 }
@@ -262,7 +311,7 @@ body  {
 }
 .btn_nav  {
 	/*margin-right: 10%;*/
-	margin-top: 5%;
+	margin-top: 1%;
 }
 
 .review_btn  {
