@@ -234,9 +234,11 @@ body  {
 	font-weight: bold;
 	text-align: center;
 }
-
+.attempted a {
+	color: white;
+}
 .review  {
-	background-color: black;
+	background-color: black !important;
 	color:white;
 	width: 30px;
 	height: 30px;
@@ -244,35 +246,49 @@ body  {
 	font-weight: bold;
 	text-align: center;
 }
+
+.review a {
+	color:white !important;
+}
 .quesNo a  {
 	text-decoration: none;
-	color:black;
+	/*color:black;*/
 	padding: 5%;
 }
 
 .buttons  {
-	margin-left: 65%;
+	margin-left: 1%;
 
 }
 .btn_nav  {
-	margin-right: 10%;
-	margin-top: 15%;
+	/*margin-right: 10%;*/
+	margin-top: 5%;
+}
+
+.review_btn  {
+	/*width: 90%;*/
+	font-size: 18px;
+	padding-left:20%;
+	padding-right: 20%;
+	/*margin-right: 40%;*/
+	/*margin-left: 65%;*/
+
 }
 
 .previous_btn  {
 	/*width: 90%;*/
 	font-size: 18px;
-	padding-left:45%;
-	padding-right: 45%;
-	margin-right: 40%;
+	padding-left:30%;
+	padding-right: 30%;
+	/*margin-right: 40%;*/
+	/*margin-left: 65%;*/
 
 }
 
 .next_btn  {
 	/*width: 90%;*/
 	font-size: 18px;
-	padding-left: 45%;
-	padding-right: 45%;
-	margin-left: 40%;
-
+	padding-left: 30%;
+	padding-right: 30%;
+	/*margin-left: 40%;*/
 }
