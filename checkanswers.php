@@ -113,6 +113,6 @@
 	var no_of_ques = answers.length; /*No. of questions*/
 	var multiplier = 10; /*Marks per question*/
 
-	score_disp2.innerHTML = score;
+	score_disp2.innerHTML = score * multiplier;
 	score_disp3.innerHTML = "/ " + no_of_ques * multiplier;
 </script>

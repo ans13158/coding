@@ -77,195 +77,77 @@
 		<!-- Script to disable next or previous buttons according to current ques no. -->
 <script>
 	/*
-	 * "answers[]" is used to retrieve value of cookie storing responses of previous questions.
-	 * "answers[]" also stores response of current question later in the code.
-	 * "answers[]" also used to check if question has been attempted or left unattempted.
-	 * "responses" is the value and name of cookie storing responses of answers.
-	 * "question" stores current question no. by taking GET parameter.
-	 * "reviews[]" stores question nos. marked for review.
-	 */
-	
-	var answers = [];
-	var responses = [];
-	var review = [];
-	//var review_ques = [];
-	
-	/*
-     * Function to retrieve VALUE of cookie whose name is given as parameter.
-	 */
-	function getCookie(c_name)  {
-	     var i,x,y,ARRcookies=document.cookie.split(";");
-	     for (i=0;i<ARRcookies.length;i++)  {
-		      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-		      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-		      x=x.replace(/^\s+|\s+$/g,"");
-		      if (x==c_name)  {
-		       	return unescape(y);
-		      }
-	     }
+ * "answers[]" is used to retrieve value of cookie storing responses of previous questions.
+ * "answers[]" also stores response of current question later in the code.
+ * "answers[]" also used to check if question has been attempted or left unattempted.
+ * "responses" is the value and name of cookie storing responses of answers.
+ * "question" stores current question no. by taking GET parameter.
+ * "reviews[]" stores question nos. marked for review.
+ */
+
+var answers = [];
+var responses = [];
+var review = [];
+//var review_ques = [];
+
+/*
+ * Function to retrieve VALUE of cookie whose name is given as parameter.
+ */
+function getCookie(c_name) {
+    var i, x, y, ARRcookies = document.cookie.split(";");
+    for (i = 0; i < ARRcookies.length; i++) {
+        x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+        y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+        x = x.replace(/^\s+|\s+$/g, "");
+        if (x == c_name) {
+            return unescape(y);
+        }
+    }
+}
+
+/*
+ * Retrieve value of RESPONSES cookie, if exists.
+ */
+
+var response_cookie = getCookie('responses');
+if (response_cookie)
+    if (response_cookie.length) {
+        answers = JSON.parse(response_cookie);
+        //alert(answers)
     }
 
-    
     /*
-	 * Retrieve value of RESPONSES cookie, if exists.
+     * Fetch value of REVIEW cookie, if exists
      */
-    
-    var response_cookie = getCookie('responses');
-    if(response_cookie)
-		if(response_cookie.length)  {
-			answers = JSON.parse(response_cookie);
-			//alert(answers)
-		}
+var review_cookie = getCookie('review');
+if (review_cookie) {
+    if (review_cookie.length) {
+        review = JSON.parse(review_cookie);
+        //alert(review);
+    }
+}
 
-  
-   /*
-	* Fetch value of REVIEW cookie, if exists
-	*/	
-		var review_cookie = getCookie('review');
-		if(review_cookie)  {
-			if(review_cookie.length)  {
-				review = JSON.parse(review_cookie);
-				//alert(review);
-			}
-		}
+/*
+ * Fetch value of GET parameter in URL.
+ */
+var urlParam = function(name) {
+    var results = new RegExp('[/?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results == null)
+        return null;
+    else
+        return decodeURI(results[1]) || 0;
+}
 
-	/*
-	 * Fetch value of GET parameter in URL.
-	 */	
-	var urlParam = function(name)  {
-		var results = new RegExp('[/?&]' + name + '=([^&#]*)').exec(window.location.href);
-		if(results == null)  
-			return null;
-		else 
-			return decodeURI(results[1]) || 0;
-	}
-
-	var question = parseInt(urlParam('k'));
-
+var question = parseInt(urlParam('k'));
 
 </script>
+	
 
-<div class="page-wrap">
-    <div class="row">
-        <!-- Displays color codes for attempted, unattempted, marked for review questions -->
-        <div class="">
-            <div class="col-md-12 color-codes">
-                <div class="col-md-4">
-                    <div class="color-1 coding" style="display: inline-block;">
-                    </div>
-                    <div style="display: inline-block;">
-                        <h4>Un-attempted</h4></div>
-                </div>
+<?php require_once "views/dispQues_view.php"; ?>
 
-                <div class="col-md-4">
-                    <div class="color-2 coding" style="display: inline-block;">
-                    </div>
-                    <div style="display: inline-block;">
-                        <h4>Attempted</h4></div>
-                </div>
 
-                <div class="col-md-4">
-                    <div class="color-3 coding" style="display: inline-block;">
-                    </div>
-                    <div style="display: inline-block;">
-                        <h4>Marked for Review</h4></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DIV FOR DISPLAYING QUESTIONS AND OPTIONS -->
-    <div class="row">
-        <div class="col-md-8 col-sm-8 section-1 ques-summary">
-            <!-- <div class="mcq-disp"> -->
-            
-            <div class="mcq-ques">
-                <div class="col-md-1 ques-heading" >
-                    <h4> <?= $quesNo ?>.</h4>
-                    <img src="assets/images/bookmark_before.svg" style="margin-left: -10px;" id="review_ques<?= $quesNo ?>">
-                    <span id="bookmark-dialog"><p>Mark Question</p></span>
-                </div>
-                <div class="col-md-11 ques-content">
-                    <h4> <?= $quesContent ?></h4>
-                </div>    
-            </div>
-
-             <div class="mcq-options col-md-offset-1 col-md-11">
-                <table class="table table-hover table-bordered"> 
-                    
-                        <br>
-                    <?php
-                        for($i=0; $i<4;$i++)  {
-                            $optNo = $i+1;
-                    ?>        
-                    <tr>
-                        
-                        <td  class="options"><label> <input type='checkbox' class='checkBox' value='<?=$optNo ?>' onclick='check(<?= $optNo ?>)' id='option<?= $optNo?>' > <?=  $options[2+ $i] ?> </label>;</td>
-                        
-                       
-                    </tr>
-                  <?php
-                  }
-                  ?>  
-                  
-                </table>
-            </div>    
-                
-                
-
-                <div class="buttons">
-                    <div class="col-md-3 btn-nav">
-                    	<button id="submit_btn" class="btn btn-danger submit_btn" onclick="finalSubmit();"> Submit Test</button>
-                    </div>	
-                    <div class="col-md-offset-3 col-md-3  btn_nav">
-                        <button id="previous_btn" class="btn btn-primary previous_btn" onclick="prevQues();"> Previous</button>
-                    </div>
-                    <div class="col-md-3 btn_nav">
-                        <button id="next_btn" class="btn btn-primary next_btn" onclick="nextQues();"> Next</button>
-                    </div>
-                    <input type="hidden" id="max_question" name="max_question" value="<?= $no_of_ques ?> ">
-                </div>
-        </div>
-    <!-- </div> -->
-
-<!-- </div> -->
-<!-- </div> -->
-
-<!-- DIV FOR DISPLAYING QUESTIONS AND OPTIONS -->
-
-<!-- /*
-                  * DISPLAYS TIME LEFT. (static as of now;will be made dynamic later on).
-                  */ -->
-<div class="col-md-4 col-sm-4  clock_inst2">
-    <div class="clock_div">
-        <div class="clock" id="clock">
-
-        </div>
-    </div>
-
-    <!-- DISPLAYS LIST OF QUESTIONS WITH COLOR CODES DEFINED ABOVE. -->
-
-    <div class="quesList_div">
-        <div class="quesList">
-            <?php for($i = 1; $i<= $no_of_ques; $i++) { ?>
-                <div class="col-md-3 quesNo_disp">
-                    <div class="quesNo unattempted" id="ques<?= $i ?>">
-                        <a class="quesNo_link" href="disp_mcq.php?k=<?= urlencode($i + 100); ?>">
-                            <?= $i ?>
-                        </a>
-                    </div>
-                </div>
-                <?php  } ?>
-
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</div>	
-
-<script>
- var reviewId = "review_ques" + (question - 100);
+<script> 
+var reviewId = "review_ques" + (question - 100);
 
 //Total no. of questions in the db.
 var no_of_ques = document.getElementById('max_question').value;
@@ -292,22 +174,22 @@ review_img.onmouseout = function() {
  *Fill values in "review" & "answers" arrays with zeroes for null values.
  */
 
-function fillReview()  {
-	for(var i = 0;i < no_of_ques; i++)  {
-		if(!review[i])  
-			review[i] = 0;
-		else
-			review[i] = review[i];
-	}
+function fillReview() {
+    for (var i = 0; i < no_of_ques; i++) {
+        if (!review[i])
+            review[i] = 0;
+        else
+            review[i] = review[i];
+    }
 }
 
-function fillAnswers()  {
-	for(var i = 0;i < no_of_ques; i++)  {
-		if(!answers[i])  
-			answers[i] = 0;
-		else
-			answers[i] = answers[i];
-	}
+function fillAnswers() {
+    for (var i = 0; i < no_of_ques; i++) {
+        if (!answers[i])
+            answers[i] = 0;
+        else
+            answers[i] = answers[i];
+    }
 }
 
 fillAnswers();
@@ -332,7 +214,7 @@ review_img.onclick = function() {
     }
 }
 
-function finalSubmit()  {
+function finalSubmit() {
     window.location.href = "finalSubmit.php";
 }
 
@@ -359,8 +241,7 @@ function check(optNo) {
         //alert(elements[i].checked)
         if (elements[i].checked) {
             checked[i] = elements[i].value;
-        } 
-        else
+        } else
             checked[i] = 0;
     }
 
@@ -439,14 +320,13 @@ startTime();
 
 function changeReviewColor() {
     if (review.length) {
-        
-        if(review[question-101] == 1 || review[question-101] == '1')  {
-        	review_img.src = "assets/images/bookmark_after.png";
+
+        if (review[question - 101] == 1 || review[question - 101] == '1') {
+            review_img.src = "assets/images/bookmark_after.png";
             review_img.style = "height :40px;width:40px";
             clickCount = 1;
-        }
-        else  {
-        	review_img.src = "assets/images/bookmark_before.svg";
+        } else {
+            review_img.src = "assets/images/bookmark_before.svg";
             review_img.style = "height :40px;width:40px";
             clickCount = 0;
         }
@@ -489,5 +369,4 @@ function changeColor() {
 
 changeColor();
 // changeReview();
-
 </script>
