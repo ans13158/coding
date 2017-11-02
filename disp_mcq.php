@@ -265,28 +265,59 @@
 </div>	
 
 <script>
-    var reviewId = "review_ques" + (question - 100);
+ var reviewId = "review_ques" + (question - 100);
+
+//Total no. of questions in the db.
+var no_of_ques = document.getElementById('max_question').value;
+no_of_ques = parseInt(no_of_ques);
 
 //Image used for bookmark icon
 var review_img = document.getElementById(reviewId);
+
 //Counts no. of clicks on bookmark icon. For odd clicks, bookmark ques.; else unmark
 var clickCount = 0
-    //Dialog "Mark Question" appears when bookmark icon is hovered upon.
+
+//Dialog "Mark Question" appears when bookmark icon is hovered upon.
 var bookmark_dialog = document.getElementById("bookmark-dialog");
+
 review_img.onmouseover = function() {
     bookmark_dialog.style = "display:block";
 }
+
 review_img.onmouseout = function() {
     bookmark_dialog.style = "display:none";
 }
 
+/*
+ *Fill values in "review" & "answers" arrays with zeroes for null values.
+ */
+
+function fillReview()  {
+	for(var i = 0;i < no_of_ques; i++)  {
+		if(!review[i])  
+			review[i] = 0;
+		else
+			review[i] = review[i];
+	}
+}
+
+function fillAnswers()  {
+	for(var i = 0;i < no_of_ques; i++)  {
+		if(!answers[i])  
+			answers[i] = 0;
+		else
+			answers[i] = answers[i];
+	}
+}
+
+fillAnswers();
+fillReview();
 /*
  * Change image when bookmark icon clicked.
  * For odd no. of clicks : bookmark_after icon else bookmark_before
  */
 review_img.onclick = function() {
     clickCount++;
-    alert("clicks : " + clickCount);
     if (clickCount % 2 == 1) {
         review_img.src = "assets/images/bookmark_after.png";
         review_img.style = "height :40px;width:40px";
@@ -299,7 +330,6 @@ review_img.onclick = function() {
         document.cookie = "review = " + JSON.stringify(review);
         changeReviewColor();
     }
-
 }
 
 function finalSubmit()  {
@@ -329,16 +359,14 @@ function check(optNo) {
         //alert(elements[i].checked)
         if (elements[i].checked) {
             checked[i] = elements[i].value;
-            alert(elements[i].value)
-
-        } else
+        } 
+        else
             checked[i] = 0;
     }
 
     for (var i = 0; i < 4; i++) {
         if (checked[i] != '0' || checked[i] != 0) {
             answers[question - 101] = parseInt(checked[i]);
-            //alert(answers)
         }
     }
     /*Fetch value of selected checkbox and store in "answers[]" array */
@@ -406,19 +434,29 @@ function startTime() {
 startTime();
 
 /*
- * Function changes colors of circles with questions that are attempted, unattempted, etc. a/c to color * code. 
+ * Function changes colors of circles with questions that are attempted, unattempted, etc. a/c to color code. 
  */
 
 function changeReviewColor() {
     if (review.length) {
-        alert(review);
+        
+        if(review[question-101] == 1 || review[question-101] == '1')  {
+        	review_img.src = "assets/images/bookmark_after.png";
+            review_img.style = "height :40px;width:40px";
+            clickCount = 1;
+        }
+        else  {
+        	review_img.src = "assets/images/bookmark_before.svg";
+            review_img.style = "height :40px;width:40px";
+            clickCount = 0;
+        }
         for (var i = 0; i < review.length; i++) {
             var id = "ques" + (i + 1);
             if (review[i] == 1 || review[i] == "1") {
                 document.getElementById(id).classList.add("review");
-                review_img.src = "assets/images/bookmark_after.png";
-                review_img.style = "height :40px;width:40px";
-                clickCount = 1;
+                // review_img.src = "assets/images/bookmark_after.png";
+                // review_img.style = "height :40px;width:40px";
+                // clickCount = 1;
             }
         }
     }
