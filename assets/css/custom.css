@@ -334,10 +334,84 @@ body  {
 
 }
 
+.submit_btn  {
+	font-size: 18px;
+	padding-left:30%;
+	padding-right: 30%;
+}
+
 .next_btn  {
 	/*width: 90%;*/
 	font-size: 18px;
 	padding-left: 30%;
 	padding-right: 30%;
 	/*margin-left: 40%;*/
+}
+
+.completed-msg  {
+	background-color: #2d1846 !important;
+	padding : 2% 2% 2% 9%;
+	margin-top: -1.5%;
+}
+
+.completed {
+	color : white;
+	font-weight: 400;
+}
+
+.part1-complete  {
+	padding-top: 1%;
+	color:white;
+	font-size: 18px;
+	font-weight: 100;
+}
+
+.rest-of-message  {
+	color:white;
+	font-size: 18px;
+	font-weight: 100;
+}
+
+.score-disp  {
+	width: 90%;
+	margin-left: 5%;
+	background-color: #fff !important;
+	padding : 2% 2% 2% 8%;
+}
+
+.scores  {
+	background-color: #e7ffec;
+	padding : 1%;
+	width: auto;
+}
+.test-cleared  {
+	color:#333;
+}
+
+.icon-tick  {
+	background-position: 3px 10px;
+	background: url("../images/tick-mark.svg") no-repeat;
+	font-size: 20px;
+}
+
+.score-disp1  {
+	color:#333;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.score-disp2  {
+	color:#000;
+	font-size: 22px;
+	font-weight: 800;
+}
+
+.score-disp3  {
+	color:#000;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.msg  {
+	color:#000;
 }

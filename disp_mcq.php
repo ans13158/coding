@@ -11,7 +11,7 @@
 	*PAGE CAN BE ACCESSED ONLY WHEN USER IS NOT LOGGED-IN.
 	*"$_SESSION['teamNo']" AND "$_SESSION['teamName']" ENSURE THIS.
 	*IF SESSION EXISTS THEN CHECK IF CREDENTIALS ARE VALID.
-	*IF USER ALREADY LOGGED IN, THEN REDIRECT TO INDEX PAGE.
+	*IF USER NOT LOGGED IN, THEN REDIRECT TO INDEX PAGE.
 	* 
 	*/
 	if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
@@ -214,8 +214,10 @@
                 
 
                 <div class="buttons">
-                    
-                    <div class="col-md-offset-6 col-md-3  btn_nav">
+                    <div class="col-md-3 btn-nav">
+                    	<button id="submit_btn" class="btn btn-danger submit_btn" onclick="finalSubmit();"> Submit Test</button>
+                    </div>	
+                    <div class="col-md-offset-3 col-md-3  btn_nav">
                         <button id="previous_btn" class="btn btn-primary previous_btn" onclick="prevQues();"> Previous</button>
                     </div>
                     <div class="col-md-3 btn_nav">
@@ -298,6 +300,10 @@ review_img.onclick = function() {
         changeReviewColor();
     }
 
+}
+
+function finalSubmit()  {
+    window.location.href = "finalSubmit.php";
 }
 
 function check(optNo) {
