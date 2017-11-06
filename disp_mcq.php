@@ -256,7 +256,7 @@ function check(optNo) {
 
 
     }
-    alert(answers)
+    
     /*Fetch value of selected checkbox and store in "answers[]" array */
 
     responses = JSON.stringify(answers);
@@ -351,6 +351,9 @@ function changeReviewColor() {
 
 changeReviewColor();
 
+/*
+ *Function changes color of Attempted and Unattempted questions.
+ */
 function changeColor() {
 
     for (var i = 0; i < answers.length; i++) {
@@ -383,6 +386,9 @@ function changeColor() {
     // 	}
     // }	
 }
+/*
+ *Function changes color of Attempted and Unattempted questions.
+ */
 
 changeColor();
 // changeReview();
