@@ -27,7 +27,8 @@
 	}
 	
 
-	require_once "common/headerLogin.php";
+require_once "views/common/header.php" ;
+	
 ?>
 <script>
 	var answers = []; 	/*Stores array of correct answers retrieved from  "answers" cookie*/

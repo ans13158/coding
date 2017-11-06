@@ -5,17 +5,19 @@
 			<div class="ques-list">
 				<div class="ques-disp">
 					<?php
-						if(strlen($message) )  
-							echo "<h3>$message</h3>";
-						else  {
-							for($i=1;$i<= $no_of_ques;$i++) {
-						?>
-						<div class="col-md-3 col-sm-3 list">
-							<a href="disp_mcq.php?k=<?= urlencode($i + 100); ?>" class="active questions" id="ques<?= $i ?>" > Question <?= $i ?></a> <!-- DISPLAYS QUESTIONS NOs. -->
-						</div>
-					<?php 
-							} 
-						}
+						if(isset($message))  {
+							if(strlen($message) )  
+								echo "<h3>$message</h3>";
+							else  {
+								for($i=1;$i<= $no_of_ques;$i++) {
+							?>
+							<div class="col-md-3 col-sm-3 list">
+								<a href="disp_mcq.php?k=<?= urlencode($i + 100); ?>" class="active questions" id="ques<?= $i ?>" > Question <?= $i ?></a> <!-- DISPLAYS QUESTIONS NOs. -->
+							</div>
+						<?php 
+								} 
+							}
+					}	
 					?>
 				</div>
 			</div>			

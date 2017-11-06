@@ -71,7 +71,7 @@
 	
 
 
-	require_once "common/headerLogin.php";
+	require_once "views/common/headerLogin.php";
 		
 ?>
 		<!-- Script to disable next or previous buttons according to current ques no. -->
@@ -234,6 +234,7 @@ function check(optNo) {
 
     /* Section enables checking only 1 checkbox at a time. */
 
+    
     /*Fetch value of selected checkbox and store in "answers[]" array */
     var checked = [];
     var elements = document.getElementsByClassName('checkBox');
@@ -244,12 +245,18 @@ function check(optNo) {
         } else
             checked[i] = 0;
     }
-
+    
     for (var i = 0; i < 4; i++) {
         if (checked[i] != '0' || checked[i] != 0) {
             answers[question - 101] = parseInt(checked[i]);
+            break;
         }
+        else
+            answers[question - 101] = 0;
+
+
     }
+    alert(answers)
     /*Fetch value of selected checkbox and store in "answers[]" array */
 
     responses = JSON.stringify(answers);
@@ -347,6 +354,7 @@ changeReviewColor();
 function changeColor() {
 
     for (var i = 0; i < answers.length; i++) {
+        id = "ques" + (i + 1);
         if (answers[i]) {
             id = "ques" + (i + 1);
             document.getElementById(id).classList.remove("unattempted");
@@ -354,6 +362,15 @@ function changeColor() {
             if (question - 101 == i) {
                 optId = "option" + answers[i];
                 document.getElementById(optId).checked = true;
+            }
+        }
+        else  {
+            var classes = document.getElementById(id).className.split(" ");
+            for(var j = 0; j < classes.length;j++)  {
+                if(classes[j] == "attempted")  {
+                    document.getElementById(id).classList.remove("attempted")
+                    document.getElementById(id).classList.add("unattempted")
+                }
             }
         }
     }

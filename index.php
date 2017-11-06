@@ -10,6 +10,7 @@
 session_start();
 require_once "connection.php";
 $login = 0;
+$message = "";
 if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
 		$teamNo = $_SESSION['teamNo'];
 		$name = $_SESSION['teamName'];
@@ -26,9 +27,9 @@ if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
 	}
 
 if(!$login)	
-	include_once "common/header.php" ; //used when user not logged in.
+	include_once "views/common/header.php" ; //used when user not logged in.
 else
-	include_once "common/headerLogin.php"; //used when user logged in.
+	include_once "views/common/headerLogin.php"; //used when user logged in.
 ?>
 
 <!-- 
@@ -52,6 +53,7 @@ if(!$result)
 $no_of_ques = $result->fetch_array()[0];
 if(!$no_of_ques)
 	$message = "No questions stored in database. Please contact the organizers.";
+else $message = "";
  	
 ?>
 

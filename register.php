@@ -83,7 +83,7 @@
 			
 ?>
 <?php
-require_once "common/header.php" ;
+require_once "views/common/header.php" ;
 ?>
 <?php
 	/*

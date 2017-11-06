@@ -66,7 +66,7 @@
 	/*
 	*REQUIRE COMMON HEADER FOR EACH PAGE.
 	*/
-	require "common/header.php";
+	require "views/common/header.php";
 ?>
 
 <?php

@@ -55,7 +55,7 @@
 
                             <td class="options">
                                 <label>
-                                    <input type='checkbox' class='checkBox' value='<?=$optNo ?>' onclick='check(<?= $optNo ?>)' id='option<?= $optNo?>'>
+                                    <input type='checkbox' class='checkBox' value='<?=$optNo ?>' onchange='check(<?= $optNo ?>)' id='option<?= $optNo?>'>
                                     <?=  $options[2+ $i] ?>
                                 </label>;</td>
 
