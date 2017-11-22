@@ -28,7 +28,7 @@
 					<div id="validPass"></div>
 
 					<div class="btn-submit">
-						<button class="btn btn-primary" name="signUp">Sign Up</button>
+						<button class="btn btn-primary" name="signUp">Log in</button>
 					</div>	
 				</form>
 			</div>

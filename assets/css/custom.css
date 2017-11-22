@@ -415,3 +415,26 @@ body  {
 .msg  {
 	color:#000;
 }
+
+.index-desc  {
+	margin-top: -20px;
+	background-color: #fff;
+	padding: 2% 10% 5% 2%;
+	height:  auto;
+}
+
+.login-div  {
+	margin-top: -20px;
+	background-color: #fff;
+	padding: 2% 10% 5% 2%;
+	height:  auto;
+}
+
+.login-div a  {
+	text-decoration: none;
+}
+
+.login-div a:hover  {
+	color:black;
+	text-decoration: underline;
+}

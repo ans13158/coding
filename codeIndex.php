@@ -1,3 +1,42 @@
+<?php
+
+
+/*
+*
+* FOLLOWING CODE CHANGES HEADER OF PAGE IF USER IS LOGGED IN (HEADER SHOWS "LOGOUT" INSTEAD OF "LOGIN").
+* CHECK IF USER ALREADY LOGGED IN. IF YES : USE "headerLogin.php" header ELSE USE "header.php" header. (the *regular one).
+* IF $login = 0, THEN NOT LOGGED IN,  ELSE LOGGED IN.
+*
+*/
+
+session_start();
+require_once "connection.php";
+$login = 0;
+$message = "";
+if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
+		$teamNo = $_SESSION['teamNo'];
+		$name = $_SESSION['teamName'];
+		$query = "SELECT * FROM `Teams` WHERE `TeamNo` = '$teamNo' AND `name` = '$name'";
+		$result = $conn->query($query);
+		if($result)  {
+			$row = $result->num_rows;
+			if($row)
+				$login = 1;
+			else 
+				$login = 0;
+			
+		}
+	}
+else  
+	header('Location:index.php');
+if(!$login)	
+	header('Location:index.php'); //Redirect to index if not logged in.
+
+else
+	include_once "views/common/headerLogin.php"; //used when user logged in.
+
+?>
+
 <div class="page-wrap">
     <div class="row">
         <!-- Displays color codes for attempted, unattempted, marked for review questions -->
@@ -117,3 +156,32 @@
     </div>
 </div>
 </div>
+
+<script>
+/*
+ * Section makes TIME LEFT section dynamic.
+ */
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    // add a zero in front of numbers<10
+    m = checkTime(m);
+    s = checkTime(s);
+    n = h + " : " + m + " : " + s;
+    document.getElementById('clock').innerHTML = "<h4> Time Left  " + n + "</h4>";
+    t = setTimeout(function() {
+        startTime()
+    }, 1000);
+}
+startTime();
+
+</script>

@@ -22,7 +22,8 @@
 		if($result)  {
 			$row = $result->num_rows;
 			if($row)
-				header('Location:index.php');
+				;   
+                //header('Location:index.php');
 		}
 	}
 	$no_of_ques = "";
@@ -296,7 +297,7 @@ function nextQues() {
 }
 
 /*
- * Section makes TIME LEFT section dynamic.
+ * Section makes TIME section dynamic.
  */
 function checkTime(i) {
     if (i < 10) {

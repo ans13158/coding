@@ -37,23 +37,6 @@ else
 	include_once "views/common/headerLogin.php"; //used when user logged in.
 ?>
 
-<div class="index-desc">
-	<h1>Blah Blah Blah</h1>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-</div>
-
-		<!-- Put this inside a modal -->
-<div class="login-div">
-	<h3><a href="login.php">Click here to login</a></h3>
-</div>	
-		<!-- Put this inside a modal -->
-
-
-<div class="modal-wrap">
-	<div class="modal-div">
-		
-	</div>
+<div>
+	
 </div>

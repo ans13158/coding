@@ -28,6 +28,7 @@ require_once "connection.php";
 	/*
 	*LOGGIN OUT
 	*/
+	
 	session_destroy();
 	
 	/*

@@ -1,11 +1,6 @@
 <?php
 
 /*
- *Landing page of the site
- */
-
-
- /*
 *
 * FOLLOWING CODE CHANGES HEADER OF PAGE IF USER IS LOGGED IN (HEADER SHOWS "LOGOUT" INSTEAD OF "LOGIN").
 * CHECK IF USER ALREADY LOGGED IN. IF YES : USE "headerLogin.php" header ELSE USE "header.php" header. (the *regular one).
@@ -37,23 +32,31 @@ else
 	include_once "views/common/headerLogin.php"; //used when user logged in.
 ?>
 
-<div class="index-desc">
-	<h1>Blah Blah Blah</h1>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-	<h4>Welcome to BlahBlahBlahBlah. We do Blah Blah Blah Blah Blah Blah</h4>
-</div>
+<!-- 
+	/*
+	 * VIEW DISPLAYS LIST OF QUESTION NOs. AND INSTRUCTIONS. 
+	 */
+-->
 
-		<!-- Put this inside a modal -->
-<div class="login-div">
-	<h3><a href="login.php">Click here to login</a></h3>
-</div>	
-		<!-- Put this inside a modal -->
+<?php
+/*
+ * Counting no. of questions in db. (no_of_ques).
+ * If no_of_ques > 20, select randomly 20 questions
+ * Else show 20 questions in random order.
+ * In this page however, we list only the question nos. 
+ */
+	
+$query = "SELECT count(*) FROM `mcqs`";
+$result = $conn->query($query);
+if(!$result)
+	die("Error retrieving questions" . $conn->error);
+$no_of_ques = $result->fetch_array()[0];
+if(!$no_of_ques)
+	$message = "No questions stored in database. Please contact the organizers.";
+else $message = "";
+ 	
+?>
 
-
-<div class="modal-wrap">
-	<div class="modal-div">
-		
-	</div>
-</div>
+<?php
+	include "views/clock_inst.php";
+?>

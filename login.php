@@ -31,7 +31,7 @@
 	*
 	*CODE FOR LOGIN.
 	*PARAMETERS CHECKED : "TeamName and Password".
-	*IF LOGIN SUCCESSFUL, CREATE AS SESSION AND PASS "Team Number, Team Name & Language(selected during *registration)".
+	*IF LOGIN SUCCESSFUL, CREATE AS SESSION AND PASS "Team Number, Team Name & Language(selected during *registration)". Redirect to "mcqPage.php"
 	*
 	*/
 	if(isset($_POST['signUp'] ) )  {
@@ -50,7 +50,7 @@
 				$_SESSION['teamNo'] = $data['TeamNo'];
 				$_SESSION['teamName'] = $data['name'];
 				$_SESSION['language'] = $data['language'];
-				header('Location:index.php');
+				header('Location:mcqPage.php');
 				
 			}
 			else  {
