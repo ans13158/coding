@@ -142,9 +142,17 @@ var urlParam = function(name) {
 var question = parseInt(urlParam('k'));
 
 </script>
+
+
+
+
 	
 
 <?php require_once "views/dispQues_view.php"; ?>
+
+
+
+
 
 
 <script> 

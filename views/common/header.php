@@ -26,12 +26,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Coding</a>
+                <a class="navbar-brand" href="index.php">Coding</a>
             </div>
             <div id="navbar1" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">MCQs</a></li>
-                <li><a href="#">Challanges</a></li>
+                <li class="active"><a href="mcqPage.php">MCQs</a></li>
+                <li><a href="codeIndex.php">Challanges</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="login.php">Login</a></li>
             </ul>

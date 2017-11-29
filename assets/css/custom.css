@@ -335,6 +335,7 @@ body  {
 }
 
 .submit_btn  {
+
 	font-size: 18px;
 	padding-left:30%;
 	padding-right: 30%;
@@ -348,6 +349,27 @@ body  {
 	/*margin-left: 40%;*/
 }
 
+.buttons_subjective  a {
+  	text-decoration: underline;
+
+}
+
+.navigations  {
+	margin-top:1%;
+}
+.btn_prev  {
+	font-size: 18px;
+	text-align: left;
+	/*padding-right: 0;
+	padding-left: 0;*/
+}
+
+.btn_next  {
+	font-size: 18px;
+	text-align: right;
+	/*padding-right: 0;
+	padding-left: 0;*/
+}
 .completed-msg  {
 	background-color: #2d1846 !important;
 	padding : 2% 2% 2% 9%;
@@ -437,4 +459,31 @@ body  {
 .login-div a:hover  {
 	color:black;
 	text-decoration: underline;
+}
+
+  #editor {
+
+    width: 100%;
+    height: 400px;
+}
+
+.text-editor  {
+	margin-bottom: 5%;
+	border:1px solid grey;
+	width: 100%;
+    height: 500px;
+}
+
+.lang-opt  {
+	background-color: grey;
+	padding: 1% 5% 1% 5%;
+	margin-bottom: 1%;
+	text-align: left;
+}
+
+.font-size  {
+	background-color: grey;
+	padding: 1% 5% 1% 5%;
+	margin-bottom: 1%;
+	text-align: left;
 }

@@ -1,4 +1,4 @@
-
+ 
 <html>
 
 <div class="page-wrap">
@@ -136,10 +136,11 @@
 		var pattern = /\d/
 		if(id.length < 5  || id.length > 5)
 			valid.innerHTML = "<h4 style='color:red'>Invalid Id No.</h4>"
+
 		if(!pattern.exec(id) )
 			valid.innerHTML = "<h4 style='color:red'>Invalid Id No. Only digits should be present</h4>"
 			
-		else if(id.length == 5 && !pattern.exec(id) && id >= 41000 && id <= 60000)
+		else if(id.length == 5 && pattern.exec(id) && id >= 41000 && id <= 60000)
 			valid.innerHTML = "<h4 style='color:blue'>Id No. OK</h4>";
 	}
 </script>
