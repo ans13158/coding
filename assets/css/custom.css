@@ -497,3 +497,13 @@ body  {
 	margin-bottom: 2%;
 	width:100%;
 }
+
+.success_div  {
+	background-color: green;
+	color:white;
+	font-weight: 900;
+	padding: 2% ;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	width:100%;
+}

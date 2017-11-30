@@ -34,8 +34,12 @@ else
 if(!$login)	
 	header('Location:index.php'); //Redirect to index if not logged in.
 
-else
+else  {
 	include_once "views/common/headerLogin.php"; //used when user logged in.
+    $team_cookie = "team_cookie";
+    $team_value = $teamNo;
+    setcookie($team_cookie,$team_value); 
+}
 
 
 /*
@@ -178,6 +182,7 @@ var question = parseInt(urlParam('ques'));
             </div>    
             
             <div id="errorSubmit" class="errorSubmit"></div>
+            <div id="success_div" class="success_div"></div>
 
             <div class="buttons_subjective">
                 <div class=" col-md-offset-3 col-md-3 btn-nav">
@@ -235,6 +240,23 @@ var question = parseInt(urlParam('ques'));
 <script src="assets/lib/src-min/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/lib/src-min/mode-java.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    /*Retrive team_cookie to create folder named team no.*/
+        function getCookie(c_name) {
+            var i, x, y, ARRcookies = document.cookie.split(";");
+            for (i = 0; i < ARRcookies.length; i++) {
+                x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+                y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+                x = x.replace(/^\s+|\s+$/g, "");
+                if (x == c_name) {
+                    return unescape(y);
+                }
+            }
+        }
+
+        var teamNo = getCookie("team_cookie");
+
+    /*Retrive team_cookie to create folder named team no.*/
+
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/crimson_editor");
     var JavaScriptMode = ace.require("ace/mode/c_cpp").Mode;
@@ -247,10 +269,14 @@ var question = parseInt(urlParam('ques'));
 <script> 
         var error_div =document.getElementById("errorSubmit");
         error_div.style = "display:none";
+
+        var success_div =document.getElementById("success_div");
+        success_div.style = "display:none";
 /*Change editor language onchange SELECT LANGUAGE dropdown*/
+    var lang = "c";
     function editorLang()  {
         var edit = document.getElementById('select_lang');
-        var lang = edit.value;
+        lang = edit.value;
         if(lang == "java")  {
             var JavaScriptMode = ace.require("ace/mode/java").Mode;
             editor.session.setMode(new JavaScriptMode());
@@ -292,39 +318,38 @@ var question = parseInt(urlParam('ques'));
 <!-- Scripts for code editor -->
 
 <script>
-
-	/*
-	 * Functionality for NEXT & PREVIOUS buttons.
-	*/
+    /*Take code to be submitted and write to file "/var/www/html/coding/answers/<teamNo>/<quesNo_lang>.txt"*/
     function finalSubmit()  {
-        // var submitCode = "func:process()&code:"+editor.session.getValue();
-        // var url = "processCode.php";
-        // var http = new XMLHttpRequest();
-        // http.open("POST",url,true);
-        // http.onreadystatechange = function(callback)  {
-        //     if(http.readyState == 4 && http.status == 200)  {
-        //         alert("done");
-        //     }
-        // }
-        // http.send(submitCode);
-
+        var fileName = question + "_" + lang + ".txt";
+        var folderName = teamNo;
         var submitCode = editor.session.getValue();
-
         $.post("processCode.php",
-            {
+            {   
+                folderName : "team"+teamNo,
+                file : fileName,
                 code : submitCode
             },
             function(data, status){
                 if(status == "success")  {
                     if(data.length > 0)  {
-                        error_div.style = "display:block";
-                        error_div.innerHTML = "Error submitting code. Please try again or contact the organizers";
+                        if(data == "Successfully submitted code")  {
+                            success_div.style = "display:block";
+                            success_div.innerHTML = "Successfully submitted code";
+                        }
+                        else  {   
+                            alert("data:"+data+";<br>status:"+status );
+                            error_div.style = "display:block";
+                            error_div.innerHTML = "Error submitting code. Please try again or contact the organizers";
+                        }
                     }
                    } 
             });
        
     }
 
+    /*
+     * Functionality for NEXT & PREVIOUS buttons.
+    */
 	function prevQues() {
 	    window.location.href = "codeIndex.php?ques=" + (question - 1);
 	}
