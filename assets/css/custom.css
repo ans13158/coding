@@ -487,3 +487,13 @@ body  {
 	margin-bottom: 1%;
 	text-align: left;
 }
+
+.errorSubmit  {
+	background-color: red;
+	color:black;
+	font-weight: 900;
+	padding: 2% ;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	width:100%;
+}

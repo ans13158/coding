@@ -166,9 +166,9 @@ var question = parseInt(urlParam('ques'));
                 <div class="font-size col-md-6">
                     <label for="fontSelect">Font Size</label>
                     <select id="font-size" onchange="selFontSize();">
+                        <option value="14">14px</option>
                         <option value="10">10px</option>
                         <option value="12">12px</option>
-                        <option value="14">14px</option>
                         <option value="16">16px</option>
                         <option value="18">18px</option>
                         <option value="20">20px</option>
@@ -177,6 +177,7 @@ var question = parseInt(urlParam('ques'));
                 <div id="editor"></div>
             </div>    
             
+            <div id="errorSubmit" class="errorSubmit"></div>
 
             <div class="buttons_subjective">
                 <div class=" col-md-offset-3 col-md-3 btn-nav">
@@ -244,6 +245,8 @@ var question = parseInt(urlParam('ques'));
     editor.session.setValue(filler);  
 </script>   
 <script> 
+        var error_div =document.getElementById("errorSubmit");
+        error_div.style = "display:none";
 /*Change editor language onchange SELECT LANGUAGE dropdown*/
     function editorLang()  {
         var edit = document.getElementById('select_lang');
@@ -294,8 +297,32 @@ var question = parseInt(urlParam('ques'));
 	 * Functionality for NEXT & PREVIOUS buttons.
 	*/
     function finalSubmit()  {
+        // var submitCode = "func:process()&code:"+editor.session.getValue();
+        // var url = "processCode.php";
+        // var http = new XMLHttpRequest();
+        // http.open("POST",url,true);
+        // http.onreadystatechange = function(callback)  {
+        //     if(http.readyState == 4 && http.status == 200)  {
+        //         alert("done");
+        //     }
+        // }
+        // http.send(submitCode);
+
         var submitCode = editor.session.getValue();
-        alert(submitCode);
+
+        $.post("processCode.php",
+            {
+                code : submitCode
+            },
+            function(data, status){
+                if(status == "success")  {
+                    if(data.length > 0)  {
+                        error_div.style = "display:block";
+                        error_div.innerHTML = "Error submitting code. Please try again or contact the organizers";
+                    }
+                   } 
+            });
+       
     }
 
 	function prevQues() {
