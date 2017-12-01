@@ -33,7 +33,7 @@
                 <li class="active"><a href="mcqPage.php">MCQs</a></li>
                 <li><a href="codeIndex.php?ques=101">Challanges</a></li>
                 <li><a href="#">Profile</a></li>
-                <li><a href="login.php">Logout</a></li>
+                <li><a href="logout.php">Logout</a></li>
             </ul>
             </div>
         </div>

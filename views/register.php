@@ -21,9 +21,9 @@
 					<div class="form-group team-info">
 						<label for="language">Select Language for Test</label>
 						<select class="form-control" name="language" id="language" required="required">
-							<option selected="selected">C</option>
-							<option>C++</option>
-							<option>Java</option>
+							<option selected="selected" value="c">C</option>
+							<option value="cpp">C++</option>
+							<option value="java">Java</option>
 						</select>  
 					</div>	
 					<div class="form-group team-info">

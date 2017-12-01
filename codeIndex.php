@@ -10,7 +10,6 @@
 * IF $login = 0, THEN NOT LOGGED IN,  ELSE LOGGED IN.
 *
 */
-
 session_start();
 require_once "connection.php";
 $login = 0;
@@ -18,6 +17,7 @@ $message = "";
 if(isset($_SESSION['teamNo']) && isset($_SESSION['teamName'] ) )  {
 		$teamNo = $_SESSION['teamNo'];
 		$name = $_SESSION['teamName'];
+        $lang = $_SESSION['language'];
 		$query = "SELECT * FROM `Teams` WHERE `TeamNo` = '$teamNo' AND `name` = '$name'";
 		$result = $conn->query($query);
 		if($result)  {
@@ -54,6 +54,7 @@ $no_of_ques = $number[0];
 ?>
 
 <script>
+var _ANSWER_PATH = "/var/www/html/coding/answers/team";    
 var urlParam = function(name) {
 var results = new RegExp('[/?&]' + name + '=([^&#]*)').exec(window.location.href);
 if (results == null)
@@ -65,16 +66,8 @@ else
 var question = parseInt(urlParam('ques'));
 </script>
 
-<style>
-    #editor {
-    
-    width: 100%;
-    height: 400px;
-}
 
-</style>
 <div class="page-wrap">
-
     <div class="row">
 
         <!-- Displays color codes for attempted, unattempted, marked for review questions -->
@@ -131,14 +124,11 @@ var question = parseInt(urlParam('ques'));
             } 
 
             fclose($quesFile);
-
-
-
     ?>
+
     <div class="row">
         <div class="col-md-8 col-sm-8 section-1 ques-summary">
             <!-- <div class="mcq-disp"> -->
-
             <div class="mcq-ques">
                 <div class="col-md-12 ques-heading">
                     <div class="col-md-1">
@@ -157,6 +147,9 @@ var question = parseInt(urlParam('ques'));
                 </div>
             </div>
             <div class="text-editor">
+                <div id="autosave-msg">
+                    <h4>Your code will be automatically saved after 1 sec.</h4>
+                </div>    
                 <div class="lang-opt col-md-6">
                     <label for="select_lang">Select Language</label>
                     <select id="select_lang" onchange="editorLang();">
@@ -254,10 +247,11 @@ var question = parseInt(urlParam('ques'));
         }
 
         var teamNo = getCookie("team_cookie");
-
+        
     /*Retrive team_cookie to create folder named team no.*/
     
     var editor = ace.edit("editor"); //defined variable for code editor object 
+
     editor.setTheme("ace/theme/crimson_editor");
     var JavaScriptMode = ace.require("ace/mode/c_cpp").Mode;
     editor.session.setMode(new JavaScriptMode());
@@ -272,8 +266,9 @@ var question = parseInt(urlParam('ques'));
     var success_div =document.getElementById("success_div");
     success_div.style = "display:none";
 
+    
 /*Change editor language onchange SELECT LANGUAGE dropdown*/
-    var lang = "c";
+    
     function editorLang()  {
         var edit = document.getElementById('select_lang');
         lang = edit.value;
@@ -286,7 +281,8 @@ var question = parseInt(urlParam('ques'));
             });
             filler =    
                             "\import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n\n/* Name of the class has to be 'Main' only if the class is public. */\n\nclass Program\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\n\t\t// your code goes here\n\n\t}\n}";
-            editor.setValue(filler);                
+            editor.setValue(filler); 
+
 
         }
 
@@ -324,9 +320,10 @@ var question = parseInt(urlParam('ques'));
     /*Show code in code editor when question's file already has content in it.*/
     function showSavedCode()  {
         var fileName = question + "_" + lang + ".txt";
-        var folder = "/var/www/html/coding/answers/team" + teamNo;
+        var folder = _ANSWER_PATH + teamNo;
         //alert(folderName + "/" + fileName);
         $.post("readCode.php", {
+            function : "checkFile",
             fileName : fileName,
             folderName : folder
         },
@@ -352,15 +349,16 @@ var question = parseInt(urlParam('ques'));
                                                             saved from autosave feature.*/
 
         var fileName = question + "_" + lang + ".txt";
-        var folderName = teamNo;
+        var folderName = _ANSWER_PATH + teamNo;
         var showSuccess = true; 
         /*if both showSuccess and showSuccessMessage are true, means show success message below. if showSuccessMessage is false, dont show message*/
         
         //Send code using POST request.
-        $.post("processCode.php",
+        $.post("readCode.php",
             {   
-                folderName : "team"+teamNo,
-                file : fileName,
+                function : "saveCode",
+                folderName : folderName,
+                fileName : fileName,
                 code : code
             },
             function(data, status){

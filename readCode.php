@@ -1,15 +1,43 @@
 <?php
+$method = $_POST['function'];
 $folderName = $_POST['folderName'];
 $fileName = $_POST['fileName'];
 $file = $folderName . "/" . $fileName;
-//echo $file;
-$data = "";
-if( is_file($file) )  {
-	$myFile = fopen($file, "r")  or die("Error opening file");
-	while(!feof($myFile))
-		$data .= fgets($myFile);
-	echo $data;
+$code = isset( $_POST['code'] ) ? $_POST['code'] : "";
+switch($method)  {
+	case "checkFile" : checkFile($file);
+					   break;
+	case "checkAttempt" : checkAttempt();
+						  break; 
+	case "saveCode"  :  saveCode($folderName,$file, $code);
+						break; 					  				   	
 }
-else  {
-	echo "File does not exist";
+
+function checkFile($file)  {
+	$data = "";
+	if( is_file($file) )  {
+		$myFile = fopen($file, "r")  or die("Error opening file");
+		while(!feof($myFile))
+			$data .= fgets($myFile);
+		
+		echo $data;
+		fclose($myFile);
+	}
+	else  {
+		echo "File does not exist";
+	}
 }
+
+function saveCode($folderName,$file, $code)  {
+	if( !is_dir($folderName) )  {
+		if( !mkdir($folderName, 0777) )
+			die("unable to create folder");
+	}
+
+	$myFile = fopen($file,"w") or die("false");
+
+	fwrite($myFile,$code) or die("error writing to file") ;
+	fclose($myFile);
+	echo "Successfully submitted code"; 
+}
+
