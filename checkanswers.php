@@ -21,7 +21,7 @@
 		$result = $conn->query($query);
 		if($result)  {
 			$row = $result->num_rows;
-			if($row)
+			if(!$row)
 				header('Location:index.php');
 		}
 	}

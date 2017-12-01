@@ -1,8 +1,1 @@
-#include <stdio.h>
-
-int main()  {
-
-	//Your code goes here
-
-	return 0;
-}
+"#include <stdio.h>\n\nint main()  {\n\n\t//Your code goes here\n    int a = 3;\n    printf(\"%d\",a);\n\treturn 0;\n}"

@@ -45,11 +45,11 @@
 	$cookie_value  = [];
 	$cookie_name = "answers";
 	$cookie_value = json_encode($arr);
-	if(setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/") )
+	if(setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/") ) // 86400 = 1 day
 		header('Location:checkanswers.php');
 		
 	else
-		die( "failed"); // 86400 = 1 day
+		die( "failed"); 
 	 ob_end_flush();
 
 	$error = isset($_GET['error'] ) ? $_GET['error']  : null ;

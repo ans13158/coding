@@ -63,8 +63,6 @@ else
 }
 
 var question = parseInt(urlParam('ques'));
-
-
 </script>
 
 <style>
@@ -186,7 +184,7 @@ var question = parseInt(urlParam('ques'));
 
             <div class="buttons_subjective">
                 <div class=" col-md-offset-3 col-md-3 btn-nav">
-                    <button id="submit_btn" class="btn btn-danger submit_btn" onclick="finalSubmit();"> Submit Code</button>
+                    <button id="submit_btn" class="btn btn-danger submit_btn" onclick="submitCode();"> Submit Code</button>
                 </div>
                 <div class="col-md-12 navigation">
                     <div class="col-md-6 btn_nav btn_prev">
@@ -239,6 +237,8 @@ var question = parseInt(urlParam('ques'));
 <script src="assets/lib/src-min/theme-crimson_editor.js"></script>
 <script src="assets/lib/src-min/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
 <script src="assets/lib/src-min/mode-java.js" type="text/javascript" charset="utf-8"></script>
+<script src="assets/lib/src-min/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+
 <script>
     /*Retrive team_cookie to create folder named team no.*/
         function getCookie(c_name) {
@@ -256,8 +256,8 @@ var question = parseInt(urlParam('ques'));
         var teamNo = getCookie("team_cookie");
 
     /*Retrive team_cookie to create folder named team no.*/
-
-    var editor = ace.edit("editor");
+    
+    var editor = ace.edit("editor"); //defined variable for code editor object 
     editor.setTheme("ace/theme/crimson_editor");
     var JavaScriptMode = ace.require("ace/mode/c_cpp").Mode;
     editor.session.setMode(new JavaScriptMode());
@@ -266,12 +266,13 @@ var question = parseInt(urlParam('ques'));
     filler = "#include <stdio.h>\n\nint main()  {\n\n\t//Your code goes here\n\n\treturn 0;\n}"
     editor.session.setValue(filler);  
 </script>   
-<script> 
+<script>
         var error_div =document.getElementById("errorSubmit");
         error_div.style = "display:none";
 
         var success_div =document.getElementById("success_div");
         success_div.style = "display:none";
+
 /*Change editor language onchange SELECT LANGUAGE dropdown*/
     var lang = "c";
     function editorLang()  {
@@ -314,28 +315,53 @@ var question = parseInt(urlParam('ques'));
         document.getElementById("editor").style.fontSize = font_size+"px";
 
     }
+
+    /*AutoSave code after every 1 sec
+     * Uses HTML5's LOCALSTORAGE    
+    */
+    function autoSave()  {
+        if(typeof(Storage) !== "undefined")  {
+            var currentCode = editor.getValue();  //Stores current code in editor
+            localStorage.setItem("currentCode", JSON.stringify(currentCode) );
+            window.onbeforeunload = function()  {
+                finalSubmit( JSON.parse(localStorage.getItem("currentCode")), false ); 
+                /*set showSucessMessage false so that success message is not displayed when autoSave saves code to file*/
+            }
+        }
+        setTimeout(autoSave,1000);
+    }
+    autoSave();
 </script>
 <!-- Scripts for code editor -->
 
 <script>
     /*Take code to be submitted and write to file "/var/www/html/coding/answers/<teamNo>/<quesNo_lang>.txt"*/
-    function finalSubmit()  {
+    function submitCode()  {
+        var code = editor.session.getValue();
+        finalSubmit(code);
+    }
+
+    function finalSubmit(code, showSucessMessage = true)  {
         var fileName = question + "_" + lang + ".txt";
         var folderName = teamNo;
-        var submitCode = editor.session.getValue();
+        var showSuccess = true; 
+        /*if both showSuccess and showSuccessMessage are true, means show success message below. if showSuccessMessage is false, dont show message*/
+        
         $.post("processCode.php",
             {   
                 folderName : "team"+teamNo,
                 file : fileName,
-                code : submitCode
+                code : code
             },
             function(data, status){
                 if(status == "success")  {
                     if(data.length > 0)  {
-                        if(data == "Successfully submitted code")  {
+                        if(data == "Successfully submitted code" && (showSucessMessage == true && showSuccess == true) )  {
                             success_div.style = "display:block";
                             success_div.innerHTML = "Successfully submitted code";
                         }
+                        else if(data == "Successfully submitted code" && (showSucessMessage == false && showSuccess == true) )  {;}
+
                         else  {   
                             alert("data:"+data+";<br>status:"+status );
                             error_div.style = "display:block";
