@@ -232,7 +232,7 @@ var question = parseInt(urlParam('ques'));
 </div>
 </div>
 
-<!-- Scripts for code editor -->
+<!-- Scripts for code editor configs -->
 <script src="assets/lib/src-min/ace.js"></script>
 <script src="assets/lib/src-min/theme-crimson_editor.js"></script>
 <script src="assets/lib/src-min/mode-c_cpp.js" type="text/javascript" charset="utf-8"></script>
@@ -265,13 +265,12 @@ var question = parseInt(urlParam('ques'));
     editor.session.setOption("tabSize",4);   
     filler = "#include <stdio.h>\n\nint main()  {\n\n\t//Your code goes here\n\n\treturn 0;\n}"
     editor.session.setValue(filler);  
-</script>   
-<script>
-        var error_div =document.getElementById("errorSubmit");
-        error_div.style = "display:none";
 
-        var success_div =document.getElementById("success_div");
-        success_div.style = "display:none";
+    var error_div =document.getElementById("errorSubmit");
+    error_div.style = "display:none";
+
+    var success_div =document.getElementById("success_div");
+    success_div.style = "display:none";
 
 /*Change editor language onchange SELECT LANGUAGE dropdown*/
     var lang = "c";
@@ -316,37 +315,48 @@ var question = parseInt(urlParam('ques'));
 
     }
 
-    /*AutoSave code after every 1 sec
-     * Uses HTML5's LOCALSTORAGE    
-    */
-    function autoSave()  {
-        if(typeof(Storage) !== "undefined")  {
-            var currentCode = editor.getValue();  //Stores current code in editor
-            localStorage.setItem("currentCode", JSON.stringify(currentCode) );
-            window.onbeforeunload = function()  {
-                finalSubmit( JSON.parse(localStorage.getItem("currentCode")), false ); 
-                /*set showSucessMessage false so that success message is not displayed when autoSave saves code to file*/
-            }
-        }
-        setTimeout(autoSave,1000);
-    }
-    autoSave();
+   
 </script>
-<!-- Scripts for code editor -->
+<!-- Scripts for code editor configs -->
 
+<!-- Scripts for code editor functionalities -->
 <script>
+    /*Show code in code editor when question's file already has content in it.*/
+    function showSavedCode()  {
+        var fileName = question + "_" + lang + ".txt";
+        var folder = "/var/www/html/coding/answers/team" + teamNo;
+        //alert(folderName + "/" + fileName);
+        $.post("readCode.php", {
+            fileName : fileName,
+            folderName : folder
+        },
+         function(data,status)  {
+           if(data!== "File does not exist")  {
+            editor.setValue(data);
+           }
+        });
+
+        }
+    
+    showSavedCode();
+
     /*Take code to be submitted and write to file "/var/www/html/coding/answers/<teamNo>/<quesNo_lang>.txt"*/
+
+    //making call to finalSubmit here so as to pass code in editor as parameter. good for reusibility
     function submitCode()  {
         var code = editor.session.getValue();
         finalSubmit(code);
     }
 
-    function finalSubmit(code, showSucessMessage = true)  {
+    function finalSubmit(code, showSucessMessage = true)  { /*showSuccessMessage set to false when code 
+                                                            saved from autosave feature.*/
+
         var fileName = question + "_" + lang + ".txt";
         var folderName = teamNo;
         var showSuccess = true; 
         /*if both showSuccess and showSuccessMessage are true, means show success message below. if showSuccessMessage is false, dont show message*/
         
+        //Send code using POST request.
         $.post("processCode.php",
             {   
                 folderName : "team"+teamNo,
@@ -373,6 +383,28 @@ var question = parseInt(urlParam('ques'));
        
     }
 
+     /*AutoSave code after every 1 sec
+     * Uses HTML5's LOCALSTORAGE    
+    */
+    function autoSave()  {
+        if(typeof(Storage) !== "undefined")  {      /*Checks if LOCALSTORAGE is supported by browser. If   
+                                                      not: Cant do anything. Sorry no autosave.*/
+
+            var currentCode = editor.getValue();  //Stores current code in editor
+            localStorage.setItem("currentCode", JSON.stringify(currentCode) );
+            window.onbeforeunload = function()  {
+                finalSubmit( JSON.parse(localStorage.getItem("currentCode")), false ); 
+                /*set showSucessMessage false so that success message is not displayed when autoSave saves code to file*/
+            }
+        }
+        setTimeout(autoSave,1000);
+    }
+    autoSave();
+</script>
+<!-- Scripts for code editor functionalities -->
+
+<!-- Scripts for other functionalities -->
+<script>
     /*
      * Functionality for NEXT & PREVIOUS buttons.
     */
@@ -412,5 +444,6 @@ var question = parseInt(urlParam('ques'));
 	}
 	startTime();
 </script>
+<!-- Scripts for other functionalities -->
 
     
