@@ -149,6 +149,7 @@ var question = parseInt(urlParam('ques'));
             <div class="text-editor">
                 <div id="autosave-msg">
                     <h4>Your code will be automatically saved after 1 sec.</h4>
+                    <h4>Select your language below.</h4>
                 </div>    
                 <div class="lang-opt col-md-6">
                     <label for="select_lang">Select Language</label>
@@ -268,10 +269,11 @@ var question = parseInt(urlParam('ques'));
 
     
 /*Change editor language onchange SELECT LANGUAGE dropdown*/
+    var edit = document.getElementById('select_lang');
+    var lang = edit.value;
     
     function editorLang()  {
-        var edit = document.getElementById('select_lang');
-        lang = edit.value;
+        lang = edit.value;    
         if(lang == "java")  {
             var JavaScriptMode = ace.require("ace/mode/java").Mode;
             editor.session.setMode(new JavaScriptMode());
@@ -283,6 +285,7 @@ var question = parseInt(urlParam('ques'));
                             "\import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n\n/* Name of the class has to be 'Main' only if the class is public. */\n\nclass Program\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\n\t\t// your code goes here\n\n\t}\n}";
             editor.setValue(filler); 
 
+            showSavedCode();
 
         }
 
@@ -292,7 +295,7 @@ var question = parseInt(urlParam('ques'));
             filler = "#include <iostream>\nusing namespace std;\n\nint main()  {\n\t//Your code goes here\n\treturn 0;\n}";
             editor.session.setOption("tabSize",4);   
             editor.session.setValue(filler);                
-
+            showSavedCode();
         }
 
         if(lang== "c")  {
@@ -300,8 +303,9 @@ var question = parseInt(urlParam('ques'));
             editor.session.setMode(new JavaScriptMode());
             editor.session.setOption("tabSize",4);   
             filler = "#include <stdio.h>\n\nint main()  {\n\n\t//Your code goes here\n\n\treturn 0;\n}";
+            showSavedCode();
             editor.session.setValue(filler);                
-
+            showSavedCode();
         }
     }
 
@@ -329,7 +333,7 @@ var question = parseInt(urlParam('ques'));
         },
          function(data,status)  {
            if(data!== "File does not exist")  {
-            editor.setValue(data);
+             editor.setValue(data);
            }
         });
 
@@ -391,6 +395,8 @@ var question = parseInt(urlParam('ques'));
             var currentCode = editor.getValue();  //Stores current code in editor
             localStorage.setItem("currentCode", JSON.stringify(currentCode) );
             window.onbeforeunload = function()  {
+                localStorage.setItem(question, JSON.stringify(lang) );
+
                 finalSubmit( JSON.parse(localStorage.getItem("currentCode")), false ); 
                 /*set showSucessMessage false so that success message is not displayed when autoSave saves code to file*/
             }
@@ -398,6 +404,21 @@ var question = parseInt(urlParam('ques'));
         setTimeout(autoSave,1000);
     }
     autoSave();
+
+    function showLastLang()  {             /*Selects language in editor that was selected last time. */
+        if(localStorage.getItem(question) )  {
+            var lastLang = JSON.parse( localStorage.getItem(question) );
+            var select_lang = document.getElementById("select_lang");
+            for(var i =0;i<select_lang.options.length;i++)  {
+                if(select_lang.options[i].value === lastLang )  {
+                    select_lang.selectedIndex = i;
+                    editorLang();
+                    break;
+                }
+            }
+        } 
+    }  
+    showLastLang();
 </script>
 <!-- Scripts for code editor functionalities -->
 

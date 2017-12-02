@@ -10,9 +10,7 @@ class Program
 	{
 
 		// your code goes here
-		int b =33,a=3;
-		System.out.println(a+b);
-		
-
+      int b =9;
+      System.out.println(b);
 	}
 }

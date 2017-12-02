@@ -1,0 +1,8 @@
+#include <stdio.h>
+
+int main()  {
+
+	//Your code goes here
+        int a =45;
+	return 0;
+}
