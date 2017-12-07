@@ -10,7 +10,9 @@ switch($method)  {
 	case "checkAttempt" : checkAttempt();
 						  break; 
 	case "saveCode"  :  saveCode($folderName,$file, $code);
-						break; 					  				   	
+						break; 		
+	case "findAttempted" : findAttempted($file);
+						   break;									  				   	
 }
 
 function checkFile($file)  {
@@ -41,3 +43,16 @@ function saveCode($folderName,$file, $code)  {
 	echo "Successfully submitted code"; 
 }
 
+
+function findAttempted($file)  {
+	if( is_file($file) )  {
+		$myFile = fopen($file, "r") or die("Error opening file");
+		$data = "";
+		while( !feof($myFile) )  {
+			$data .= fgets($myFile);
+		}
+		echo $data;
+	}
+	else
+		echo "Unattempted";
+}

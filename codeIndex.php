@@ -177,8 +177,11 @@ var question = parseInt(urlParam('ques'));
             <div id="success_div" class="success_div"></div>
 
             <div class="buttons_subjective">
-                <div class=" col-md-offset-3 col-md-3 btn-nav">
+                <div class=" col-md-offset-2 col-md-3 btn-nav">
                     <button id="submit_btn" class="btn btn-danger submit_btn" onclick="submitCode();"> Submit Code</button>
+                </div>
+                <div class="col-md-offset-1 col-md-3 btn-nav">
+                    <button id="submit_btn" class="btn btn-danger submit_btn" onclick="resetCode();"> Reset Code</button>
                 </div>
                 <div class="col-md-12 navigation">
                     <div class="col-md-6 btn_nav btn_prev">
@@ -212,7 +215,7 @@ var question = parseInt(urlParam('ques'));
                     <?php for($i = 1; $i<= $no_of_ques; $i++) { ?>
                         <div class="col-md-3 quesNo_disp">
                             <div class="quesNo unattempted" id="ques<?= $i ?>">
-                                <a class="quesNo_link" href="disp_mcq.php?k=<?= urlencode($i + 100); ?>">
+                                <a class="quesNo_link" href="codeIndex.php?ques=<?= urlencode($i + 100); ?>">
                                     <?= $i ?>
                                 </a>
                             </div>
@@ -234,7 +237,9 @@ var question = parseInt(urlParam('ques'));
 <script src="assets/lib/src-min/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-    /*Retrive team_cookie to create folder named team no.*/
+
+    var attempted = []; //array to keep track of attempted and unattempted questions
+    /*Retrive team_cookie to create folder with name  <team no.>*/
         function getCookie(c_name) {
             var i, x, y, ARRcookies = document.cookie.split(";");
             for (i = 0; i < ARRcookies.length; i++) {
@@ -248,6 +253,13 @@ var question = parseInt(urlParam('ques'));
         }
 
         var teamNo = getCookie("team_cookie");
+        if(getCookie("attempted") )  {
+            attempted = JSON.parse( getCookie("attempted") );
+            for(var i =0;i< <?= $no_of_ques ?> ;i++)  {
+                if(!attempted[i])
+                    attempted[i] = 0;
+            }    
+        }
         
     /*Retrive team_cookie to create folder named team no.*/
     
@@ -272,8 +284,15 @@ var question = parseInt(urlParam('ques'));
     var edit = document.getElementById('select_lang');
     var lang = edit.value;
     
+    var java_filler = "import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n\n/* Name of the class has to be 'Main' only if the class is public. */\n\nclass Program\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\n\t\t// your code goes here\n\n\t}\n}"; 
+
+        var cpp_filler = "#include <iostream>\nusing namespace std;\n\nint main()  {\n\t//Your code goes here\n\treturn 0;\n}";  
+
+        var c_filler = "#include <stdio.h>\n\nint main()  {\n\n\t//Your code goes here\n\n\treturn 0;\n}";
+
     function editorLang()  {
-        lang = edit.value;    
+        var lang = edit.value; 
+                         
         if(lang == "java")  {
             var JavaScriptMode = ace.require("ace/mode/java").Mode;
             editor.session.setMode(new JavaScriptMode());
@@ -281,31 +300,27 @@ var question = parseInt(urlParam('ques'));
                 tabSize : 2,
                 useSoftTabs : true
             });
-            filler =    
-                            "\import java.util.*;\nimport java.lang.*;\nimport java.io.*;\n\n/* Name of the class has to be 'Main' only if the class is public. */\n\nclass Program\n{\n\tpublic static void main (String[] args) throws java.lang.Exception\n\t{\n\n\t\t// your code goes here\n\n\t}\n}";
-            editor.setValue(filler); 
+            
+            editor.setValue(java_filler); 
 
-            showSavedCode();
+            //showSavedCode();
 
         }
 
         if(lang == "cpp")  {
             var JavaScriptMode = ace.require("ace/mode/c_cpp").Mode;
             editor.session.setMode(new JavaScriptMode());
-            filler = "#include <iostream>\nusing namespace std;\n\nint main()  {\n\t//Your code goes here\n\treturn 0;\n}";
             editor.session.setOption("tabSize",4);   
-            editor.session.setValue(filler);                
-            showSavedCode();
+            editor.setValue(cpp_filler);                
+            //showSavedCode();
         }
 
         if(lang== "c")  {
             var JavaScriptMode = ace.require("ace/mode/c_cpp").Mode;
             editor.session.setMode(new JavaScriptMode());
-            editor.session.setOption("tabSize",4);   
-            filler = "#include <stdio.h>\n\nint main()  {\n\n\t//Your code goes here\n\n\treturn 0;\n}";
-            showSavedCode();
-            editor.session.setValue(filler);                
-            showSavedCode();
+            editor.session.setOption("tabSize",4);  
+            editor.setValue(c_filler);
+            //showSavedCode();
         }
     }
 
@@ -323,6 +338,7 @@ var question = parseInt(urlParam('ques'));
 <script>
     /*Show code in code editor when question's file already has content in it.*/
     function showSavedCode()  {
+       
         var fileName = question + "_" + lang + ".txt";
         var folder = _ANSWER_PATH + teamNo;
         //alert(folderName + "/" + fileName);
@@ -346,12 +362,14 @@ var question = parseInt(urlParam('ques'));
     //making call to finalSubmit here so as to pass code in editor as parameter. good for reusibility
     function submitCode()  {
         var code = editor.session.getValue();
+        
         finalSubmit(code);
     }
 
     function finalSubmit(code, showSucessMessage = true)  { /*showSuccessMessage set to false when code 
                                                             saved from autosave feature.*/
-
+        if(code.length == 0 || code.length == '0')
+            code = " ";                                                    
         var fileName = question + "_" + lang + ".txt";
         var folderName = _ANSWER_PATH + teamNo;
         var showSuccess = true; 
@@ -399,6 +417,8 @@ var question = parseInt(urlParam('ques'));
 
                 finalSubmit( JSON.parse(localStorage.getItem("currentCode")), false ); 
                 /*set showSucessMessage false so that success message is not displayed when autoSave saves code to file*/
+                changeColorScheme(); 
+                //See if question attempted or not before page unloads.
             }
         }
         setTimeout(autoSave,1000);
@@ -419,8 +439,96 @@ var question = parseInt(urlParam('ques'));
         } 
     }  
     showLastLang();
+
 </script>
 <!-- Scripts for code editor functionalities -->
+
+<!-- Script for marking attempted, unattempted & bookmarked questions -->
+<script>
+    
+    //Question is unattempted when filler code not edited.
+
+    function resetCode()  {
+        editor.setValue("");
+        attempted[question - 101] = 0;
+        document.cookie = "attempted =" +  JSON.stringify(attempted) ;                   
+        changeColorScheme();
+
+    }
+
+    function changeColorScheme()  {
+        lastLang = JSON.parse( localStorage.getItem(question) );
+        folderName = _ANSWER_PATH + teamNo;
+        fileName = question + "_" + lastLang + ".txt"; 
+        $.post("readCode.php", 
+            {
+                function : "findAttempted",
+                folderName : folderName,
+                fileName : fileName
+
+            },
+            function(data,status)  {
+                c_filler = JSON.stringify(c_filler);
+                cpp_filler = JSON.stringify(cpp_filler);
+                java_filler = JSON.stringify(java_filler);
+                index = question -101; //index to be filled in attempted[] array
+                
+                if(data === "Unattempted")
+                   attempted[index] = 0;
+                    
+                else  {         //when file contains only filler code for selected language. 
+                    data = JSON.stringify(data);
+                    if(lastLang == "c")  
+                        if(data == c_filler || data.length == 0)  
+                            attempted[index] = 0;
+                        else if(data == "")
+                            attempted[index] = 1;
+                        else
+                            attempted[index] = 1;
+
+
+                    else if(lastLang == "cpp" || data.length == 0)
+                         if(data == cpp_filler)
+                            attempted[index] = 0;
+                          else if(data == "")
+                            attempted[index] = 1;
+                        else
+                            attempted[index] = 1;
+
+                    else if(lastLang == "java")
+                           if(data == java_filler || data.length == 0)
+                              attempted[index] = 0;  
+                            else if(data == "")
+                                attempted[index] = 1;
+                            else
+                                attempted[index] = 1;
+                          
+                    document.cookie = "attempted =" +  JSON.stringify(attempted) ;                   
+                    }
+            });
+
+        for(var i= 0; i<attempted.length;i++)  {
+            if(attempted[i] == "1" || attempted[i] == 1)  {
+               document.getElementById("ques"+ (i + 1) ).classList.remove("unattempted"); 
+               document.getElementById("ques"+ (i+1) ).classList.add("attempted"); 
+            }
+            else  {
+                var classes = document.getElementById("ques"+ (question-100)).className.split(" ");
+                for(var j =0;j<classes.length;j++)  {
+                    if(classes[j] == "attempted") {
+                        document.getElementById("ques"+ (j) ).classList.remove("attempted");
+                        document.getElementById("ques"+ (j) ).classList.add("unattempted"); 
+
+                    }
+            }
+
+        }
+    }
+}    
+    changeColorScheme();
+</script>
+<!-- Script for attempted, unattempted & bookmarked questions -->
+
 
 <!-- Scripts for other functionalities -->
 <script>

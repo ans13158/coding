@@ -3,6 +3,6 @@
 int main()  {
 
 	//Your code goes here
-    int a  = 9;
+    int a = 0;
 	return 0;
 }

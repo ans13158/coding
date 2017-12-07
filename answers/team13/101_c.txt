@@ -3,6 +3,8 @@
 int main()  {
 
 	//Your code goes here
-
+    int a ;
+    scanf("%d",&a);
+    printf("%d",a);
 	return 0;
 }
