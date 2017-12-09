@@ -448,84 +448,84 @@ var question = parseInt(urlParam('ques'));
     
     //Question is unattempted when filler code not edited.
 
-    function resetCode()  {
-        editor.setValue("");
-        attempted[question - 101] = 0;
-        document.cookie = "attempted =" +  JSON.stringify(attempted) ;                   
-        changeColorScheme();
+//     function resetCode()  {
+//         editor.setValue("");
+//         attempted[question - 101] = 0;
+//         document.cookie = "attempted =" +  JSON.stringify(attempted) ;                   
+//         changeColorScheme();
 
-    }
+//     }
 
-    function changeColorScheme()  {
-        lastLang = JSON.parse( localStorage.getItem(question) );
-        folderName = _ANSWER_PATH + teamNo;
-        fileName = question + "_" + lastLang + ".txt"; 
-        $.post("readCode.php", 
-            {
-                function : "findAttempted",
-                folderName : folderName,
-                fileName : fileName
+//     function changeColorScheme()  {
+//         lastLang = JSON.parse( localStorage.getItem(question) );
+//         folderName = _ANSWER_PATH + teamNo;
+//         fileName = question + "_" + lastLang + ".txt"; 
+//         $.post("readCode.php", 
+//             {
+//                 function : "findAttempted",
+//                 folderName : folderName,
+//                 fileName : fileName
 
-            },
-            function(data,status)  {
-                c_filler = JSON.stringify(c_filler);
-                cpp_filler = JSON.stringify(cpp_filler);
-                java_filler = JSON.stringify(java_filler);
-                index = question -101; //index to be filled in attempted[] array
+//             },
+//             function(data,status)  {
+//                 c_filler_string = JSON.stringify(c_filler);
+//                 cpp_filler_string = JSON.stringify(cpp_filler);
+//                 java_filler_string = JSON.stringify(java_filler);
+//                 index = question -101; //index to be filled in attempted[] array
                 
-                if(data === "Unattempted")
-                   attempted[index] = 0;
+//                 if(data === "Unattempted")
+//                    attempted[index] = 0;
                     
-                else  {         //when file contains only filler code for selected language. 
-                    data = JSON.stringify(data);
-                    if(lastLang == "c")  
-                        if(data == c_filler || data.length == 0)  
-                            attempted[index] = 0;
-                        else if(data == "")
-                            attempted[index] = 1;
-                        else
-                            attempted[index] = 1;
+//                 else  {         //when file contains only filler code for selected language. 
+//                     data = JSON.stringify(data);
+//                     if(lastLang == "c")  
+//                         if(data == c_filler_string || data.length == 0)  
+//                             attempted[index] = 0;
+//                         else if(data == "")
+//                             attempted[index] = 1;
+//                         else
+//                             attempted[index] = 1;
 
 
-                    else if(lastLang == "cpp" || data.length == 0)
-                         if(data == cpp_filler)
-                            attempted[index] = 0;
-                          else if(data == "")
-                            attempted[index] = 1;
-                        else
-                            attempted[index] = 1;
+//                     else if(lastLang == "cpp" || data.length == 0)
+//                          if(data == cpp_filler_string)
+//                             attempted[index] = 0;
+//                           else if(data == "")
+//                             attempted[index] = 1;
+//                         else
+//                             attempted[index] = 1;
 
-                    else if(lastLang == "java")
-                           if(data == java_filler || data.length == 0)
-                              attempted[index] = 0;  
-                            else if(data == "")
-                                attempted[index] = 1;
-                            else
-                                attempted[index] = 1;
+//                     else if(lastLang == "java")
+//                            if(data == java_filler_string || data.length == 0)
+//                               attempted[index] = 0;  
+//                             else if(data == "")
+//                                 attempted[index] = 1;
+//                             else
+//                                 attempted[index] = 1;
                           
-                    document.cookie = "attempted =" +  JSON.stringify(attempted) ;                   
-                    }
-            });
+//                     document.cookie = "attempted =" +  JSON.stringify(attempted) ;                   
+//                     }
+//             });
 
-        for(var i= 0; i<attempted.length;i++)  {
-            if(attempted[i] == "1" || attempted[i] == 1)  {
-               document.getElementById("ques"+ (i + 1) ).classList.remove("unattempted"); 
-               document.getElementById("ques"+ (i+1) ).classList.add("attempted"); 
-            }
-            else  {
-                var classes = document.getElementById("ques"+ (question-100)).className.split(" ");
-                for(var j =0;j<classes.length;j++)  {
-                    if(classes[j] == "attempted") {
-                        document.getElementById("ques"+ (j) ).classList.remove("attempted");
-                        document.getElementById("ques"+ (j) ).classList.add("unattempted"); 
+//         for(var i= 0; i<attempted.length;i++)  {
+//             if(attempted[i] == "1" || attempted[i] == 1)  {
+//                document.getElementById("ques"+ (i + 1) ).classList.remove("unattempted"); 
+//                document.getElementById("ques"+ (i+1) ).classList.add("attempted"); 
+//             }
+//             else  {
+//                 var classes = document.getElementById("ques"+ (question-101)).className.split(" ");
+//                 for(var j =0;j<classes.length;j++)  {
+//                     if(classes[j] == "attempted") {
+//                         document.getElementById("ques"+ (j+1) ).classList.remove("attempted");
+//                         document.getElementById("ques"+ (j+1) ).classList.add("unattempted"); 
 
-                    }
-            }
+//                     }
+//             }
 
-        }
-    }
-}    
-    changeColorScheme();
+//         }
+//     }
+// }    
+//     changeColorScheme();
 </script>
 <!-- Script for attempted, unattempted & bookmarked questions -->
 

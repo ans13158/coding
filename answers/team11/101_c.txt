@@ -1,1 +1,8 @@
- 
+#include <stdio.h>
+
+int main()  {
+
+	//Your code goes here
+    int a;
+	return 0;
+}
