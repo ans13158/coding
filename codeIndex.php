@@ -62,7 +62,7 @@ if (results == null)
 else
    return decodeURI(results[1]) || 0;
 }
-
+var clickCount = 0;
 var question = parseInt(urlParam('ques'));
 </script>
 
@@ -133,7 +133,7 @@ var question = parseInt(urlParam('ques'));
                 <div class="col-md-12 ques-heading">
                     <div class="col-md-1">
                         <h3> <?= $quesNo ?>. 
-                            <img src="assets/images/bookmark_before.svg" style="margin-left: -10px;height: 35px;width:35px" id="review_ques<?= $quesNo ?>">
+                            <img src="assets/images/bookmark_before.svg" style="margin-left: -10px;height: 35px;width:35px" id="review_ques<?= $quesNo ?>" onclick="markReview()">
                              <span id="bookmark-dialog"><p>Mark Question</p></span>
                         </h3> 
                     </div>
@@ -261,6 +261,14 @@ var question = parseInt(urlParam('ques'));
             }    
         }
         
+        // if(getCookie("bookmarked_cookie") )  {
+        //     bookmarked = JSON.parse( getCookie(bookmarked_cookie) );
+        //     for(var i = 0; i < <?= $no_of_ques ?> ; i++)  {
+        //        if(!bookmarked[i]) 
+        //          bookmarked [i] = 0;
+        //     }
+        
+        // }
     /*Retrive team_cookie to create folder named team no.*/
     
     var editor = ace.edit("editor"); //defined variable for code editor object 
@@ -445,7 +453,12 @@ var question = parseInt(urlParam('ques'));
 
 <!-- Script for marking attempted, unattempted & bookmarked questions -->
 <script>
-    
+    // function markReview()  {
+    //     clickCount++;
+        
+
+    // }
+
     //Question is unattempted when filler code not edited.
 
 //     function resetCode()  {
